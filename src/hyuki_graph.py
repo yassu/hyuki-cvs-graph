@@ -38,7 +38,7 @@ def get_dates():
     today = datetime.datetime.today()
     for days in [7 - days for days in range(7 + 1)]:
         date = today - datetime.timedelta(days=days)
-        yield datetime.date(date.year, date.month, date.day)
+        yield datetime.datetime(date.year, date.month, date.day)
 
 def main():
     commits = dict()
@@ -61,6 +61,10 @@ def main():
         draw.text((left_span + i * cell_width, 0), date_text, fill='#000000')
 
         for j, project in enumerate(projects):
+            print(commits[project])
+            print(date)
+            print(type(date))
+
             if commits[project][date] != 0:
                 draw.rectangle(
                     (
