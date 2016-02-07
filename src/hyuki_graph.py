@@ -7,7 +7,6 @@ import pprint
 import subprocess
 
 def get_commit_numbers(path):
-    print(path)
     os.chdir(path)
     if not os.path.isdir(path + '/.git'):
         return None
