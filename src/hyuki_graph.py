@@ -39,4 +39,10 @@ def get_dates():
     for days in [7 - days for days in range(7 + 1)]:
         yield today - datetime.timedelta(days=days)
 
-pprint.pprint(get_commit_numbers('.'))
+def main():
+    commits = dict()
+    for path in list(get_cvs_dirs('.')):
+        commits[path] = get_commit_numbers(path)
+    pprint.pprint(commits)
+
+main()
