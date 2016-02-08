@@ -51,10 +51,14 @@ def get_commits_log(commits, day_num):
     splitted_logs = []
     proj_len = max(len(project) for project in projects) + 1
 
+    more_than_nine = (day_num >= 10)
+
     date_log = ' ' * proj_len
     date_cnt = 0
+    space_digit = 2 if more_than_nine else 1
     for date in dates:
-        date_log += str(date_cnt) + ' '
+        # date_log += str(date_cnt) + ' '
+        date_log += ('%' + str(space_digit) + 'd') % date_cnt + ' '
         date_cnt += 1
     splitted_logs.append(date_log)
 
@@ -62,6 +66,8 @@ def get_commits_log(commits, day_num):
     for proj in sorted(projects, key=lambda s: s.lower()):
         proj_log = proj + ' ' * (proj_len - len(proj))
         for date in dates:
+            if more_than_nine:
+                proj_log += ' '
             proj_log += logs[(proj, date)] + ' '
 
         splitted_logs.append(proj_log)
