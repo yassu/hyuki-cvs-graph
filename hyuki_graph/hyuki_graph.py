@@ -2,6 +2,7 @@
 # coding: UTF-8
 
 import os
+import sys
 import datetime
 import pprint
 import subprocess
@@ -41,6 +42,11 @@ def get_commits_log(commits, day_num):
         for date, commit_num in commits.items():
             logs[(project, date)] = alive if (commit_num > 0) else dead
             projects.add(project)
+
+    if projects == set():
+        sys.stderr.write("WARNING: There doesn't exist repository which"
+                         "this program can display.\n")
+        sys.exit()
 
     splitted_logs = []
     proj_len = max(len(project) for project in projects) + 1
