@@ -21,22 +21,21 @@ CVSを用いて自動的に行うためのソフトです.
 最後に,
 
 ``` bash
-python3 hyuki_graph.py -n 14
+hgraph -n 14
 ```
 
 などとすることで, 何日前から見ることができるかが設定できます.
 
-使い方
-===========
+インストール方法
+==========================
 
-このプロジェクトフォルダ内の`src/hyuki_graph.py`をパスの通ったところに置いて,
-そこをpythonで実行するようにaliasを設定してください.
-例えば,
+このプロジェクトをクローン, もしくはダウンロードして, このプロジェクトの直下で
 
-``` bash
-% cp src/hyuki_graph.py ~/bin/
-% alias hgraph='python3 ~/bin/hyuki_graph.py'
+``` python
+python setup.py install
 ```
+
+を実行して下さい.
 
 残っているタスク
 ==========================
