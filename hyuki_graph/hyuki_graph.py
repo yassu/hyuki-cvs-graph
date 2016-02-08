@@ -7,8 +7,7 @@ import datetime
 import pprint
 import subprocess
 from optparse import OptionParser
-
-__VERSION__ = '0.0.1'
+from __init__ import __VERSION__
 
 DEFAULT_NUMBER_OF_DAY = 7
 
