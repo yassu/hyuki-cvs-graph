@@ -25,7 +25,7 @@ setup(
     classifiers=classifiers,
     entry_points="""
        [console_scripts]
-       hgraph = hyuki_graph.hyuki_graph:main
+       hyuki-graph = hyuki_graph.hyuki_graph:main
     """,
 )
 
