@@ -5,7 +5,40 @@ import os
 import datetime
 import pprint
 import subprocess
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
+
+class ImageList(list):
+    # list of str objects
+    # this object has image method, which returns image object
+
+    def __init__(self):
+        list.__init__(self)
+        self._default_width = None
+
+    @property
+    def image(self, height=30, xpad=3, ypad=3):
+        # width = sum()
+        font_size = 13
+        font = ImageFont.truetype('FreeSans.ttf', font_size)
+        height = ypad + font_size + ypad
+        if self:
+            width = sum([len(s) for s in self]) * font_size + \
+                (len(self) - 1)*xpad
+        else:
+            width = self._default_width
+        img = Image.new('RGB', (width, height), (255, 255, 255))
+        draw = ImageDraw.Draw(img)
+        for i in range(len(self)):
+            draw.text(
+                (sum(len(s) for s in self[:i]) * font_size,
+                0),
+                self[i],
+                font=font, fill='#000000')
+        return img
+
+    def set_default_width(self, width):
+        self._default_width = width
+
 
 def get_commit_numbers(path):
     os.chdir(path)
@@ -77,4 +110,9 @@ def main():
     image_matrix.show()
 
 if __name__ == '__main__':
-    main()
+    # main()
+    img_list = ImageList()
+    img_list.append("Roque2.py")
+    img_list.append("World")
+    img = img_list.image
+    img.show()
