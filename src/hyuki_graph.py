@@ -5,7 +5,9 @@ import os
 import datetime
 import pprint
 import subprocess
-from PIL import Image, ImageDraw, ImageFont
+from optparse import OptionParser
+
+__VERSION__ = '0.0.1'
 
 def get_commits_log(commits):
     dead  = '\033[91m' + "D" + '\033[0m'
@@ -76,7 +78,16 @@ def get_dates():
 def get_str_projname(project):
     return project.split('/')[-1]
 
+def get_parser():
+    parser = OptionParser(version=__VERSION__)
+    return parser
+
 def main():
+    opts, args = get_parser().parse_args()
+    base_path = '.'
+    if len(args) >= 1:
+        base_path = os.path.abspath(args[0])
+
     commits = dict()
     projects = list(get_cvs_dirs('.'))
     for path in projects:
