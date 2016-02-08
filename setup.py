@@ -2,7 +2,7 @@ from setuptools import setup
 from hyuki_graph import __VERSION__
 
 classifiers = [
-    'Development Status :: 5 - Production/Stable',
+    'Development Status :: 3 - Alpha',
     'Environment :: Console',
     'License :: OSI Approved :: MIT License',
     'Programming Language :: Python',
