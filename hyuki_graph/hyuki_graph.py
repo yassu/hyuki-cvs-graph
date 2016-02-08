@@ -123,7 +123,7 @@ def get_dates(day_num):
 
 
 def get_str_projname(project):
-    return project.split('/')[-1]
+    return project.split(os.path.sep)[-1]
 
 
 def get_parser():
