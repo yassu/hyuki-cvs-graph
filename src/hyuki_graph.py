@@ -40,9 +40,13 @@ def get_dates():
         date = today - datetime.timedelta(days=days)
         yield datetime.datetime(date.year, date.month, date.day)
 
+def get_str_projname(project):
+    return project.split('/')[-1]
+
 def main():
     commits = dict()
     projects = list(get_cvs_dirs('.'))
+    pprint.pprint(projects)
     for path in projects:
         commits[path] = get_commit_numbers(path)
 
@@ -61,18 +65,16 @@ def main():
         draw.text((left_span + i * cell_width, 0), date_text, fill='#000000')
 
         for j, project in enumerate(projects):
-            print(commits[project])
-            print(date)
-            print(type(date))
 
             if commits[project][date] != 0:
                 draw.rectangle(
                     (
-                        (i * cell_width, (j + 1) * cell_height),
-                        ((i + 1) * cell_width, (j + 2) * cell_height)
+                        ((i + 1) * cell_width, (j + 1) * cell_height),
+                        ((i + 2) * cell_width, (j + 2) * cell_height)
                     ),
                     fill=(0, 0, 256), outline=(0, 0, 0))
 
     image_matrix.show()
 
-main()
+if __name__ == '__main__':
+    main()
