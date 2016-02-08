@@ -59,7 +59,7 @@ def get_commits_log(commits, day_num):
     splitted_logs.append(date_log)
 
     proj_log = ''
-    for proj in sorted(projects):
+    for proj in sorted(projects, key=lambda s: s.lower()):
         proj_log = proj + ' ' * (proj_len - len(proj))
         for date in dates:
             proj_log += logs[(proj, date)] + ' '
