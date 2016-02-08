@@ -66,9 +66,8 @@ def get_commit_numbers(path, day_num):
 
 def get_children_dirs(path):
     yield os.path.abspath(path)
-    for (_, dirs, _) in os.walk(path):
-        for d in dirs:
-            yield os.path.abspath(d)
+    for (root, dirs, _) in os.walk(path):
+        yield os.path.abspath(root)
 
 
 def get_cvs_dirs(path):
