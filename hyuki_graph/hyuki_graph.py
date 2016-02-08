@@ -109,9 +109,9 @@ def get_children_dirs(path):
 
 def get_cvs_dirs(path):
     for p in get_children_dirs(path):
-        if os.path.isdir(p + '/.git'):
+        if os.path.isdir(os.path.join(p, '.git')):
             yield p
-        elif os.path.isdir(p + '/.hg'):
+        elif os.path.isdir(os.path.join(p, '.hg')):
             yield p
 
 
