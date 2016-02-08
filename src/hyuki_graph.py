@@ -9,10 +9,12 @@ from optparse import OptionParser
 
 __VERSION__ = '0.0.1'
 
-def get_commits_log(commits):
+DEFAULT_NUMBER_OF_DAY = 7
+
+def get_commits_log(commits, day_num):
     dead  = '\033[91m' + "D" + '\033[0m'
     alive = '\033[92m' + "A" + '\033[0m'
-    dates = list(get_dates())
+    dates = list(get_dates(day_num))
     projects = set()
 
     logs = dict() # dictionary from tuple of projname and date to dead or alive
@@ -42,7 +44,7 @@ def get_commits_log(commits):
 
     return '\n'.join(splitted_logs)
 
-def get_commit_numbers(path):
+def get_commit_numbers(path, day_num):
     os.chdir(path)
     if not os.path.isdir(path + '/.git'):
         return None
@@ -53,7 +55,7 @@ def get_commit_numbers(path):
 
     numbers = dict()
 
-    for date in get_dates():
+    for date in get_dates(day_num):
         year, month, day = date.year, date.month, date.day
         _format = "%04d-%02d-%02d" % (year, month, day)
         numbers[datetime.date(year, month, day)] = log.count(_format)
@@ -70,9 +72,9 @@ def get_cvs_dirs(path):
         if os.path.isdir(p + '/.git'):
             yield p
 
-def get_dates():
+def get_dates(day_num):
     today = datetime.date.today()
-    for days in [7 - days for days in range(7 + 1)]:
+    for days in [day_num - days for days in range(day_num + 1)]:
         date = today - datetime.timedelta(days=days)
         yield datetime.date(date.year, date.month, date.day)
 
@@ -81,20 +83,25 @@ def get_str_projname(project):
 
 def get_parser():
     parser = OptionParser(version=__VERSION__)
+    parser.add_option(
+        '--day-num', '-n',
+        action='store',
+        dest='day_num',
+        help='number of considering day')
     return parser
 
 def main():
     opts, args = get_parser().parse_args()
-    base_path = '.'
-    if len(args) >= 1:
-        base_path = os.path.abspath(args[0])
+    if not opts.day_num:
+        opts.day_num = DEFAULT_NUMBER_OF_DAY
+    base_path = os.path.abspath('.' if len(args) == 0 else args[0])
 
     commits = dict()
-    projects = list(get_cvs_dirs('.'))
+    projects = list(get_cvs_dirs(base_path))
     for path in projects:
-        commits[path] = get_commit_numbers(path)
+        commits[path] = get_commit_numbers(path, opts.day_num)
 
-    commits_log = get_commits_log(commits)
+    commits_log = get_commits_log(commits, opts.day_num)
     print(commits_log)
 
 
