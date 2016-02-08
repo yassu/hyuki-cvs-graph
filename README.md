@@ -4,7 +4,7 @@ Hyuki-CVS-Graph
 結城先生が考えておられる[色つき星取表](https://note.mu/hyuki/n/n9a6e7c1e0d7b)と同様のことを
 CVSを用いて自動的に行うためのソフトです.
 
-![example](path)
+![example](https://raw.githubusercontent.com/yassu/hyuki-cvs-graph/master/imgs/example.gif)
 
 このソフトは, gitからプロジェクト名を縦, 日数を横に書いてある表を作成します.
 
