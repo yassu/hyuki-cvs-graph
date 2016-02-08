@@ -39,6 +39,27 @@ class ImageList(list):
     def set_default_width(self, width):
         self._default_width = width
 
+class ImageMatrix(list):
+    # list of ImageList object
+    # this object has image method, which returns image object
+
+    @property
+    def image(self):
+        width = 0
+        for img_y in self:
+            width += max([img.size[0] for img in img_y])
+
+        height = 0
+        for x in range(len(self)):
+            height += max([img.size[1] for img in
+                [self[y][x] for y in range(len(self))]
+            ])
+        print(width, height)
+        img = Image.new('RGB',
+                (width, height),
+                (255, 255, 255))
+
+        return img
 
 def get_commit_numbers(path):
     os.chdir(path)
@@ -111,8 +132,16 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    img_list = ImageList()
-    img_list.append("Roque2.py")
-    img_list.append("World")
-    img = img_list.image
+    img_list1 = ImageList()
+    img_list1.append("Hello")
+    img_list1.append("World")
+
+    img_list2 = ImageList()
+    img_list2.append("Hello2")
+    img_list2.append("World2")
+
+    img_mat = ImageMatrix()
+    img_mat.append(img_list1)
+    img_mat.append(img_list2)
+    img = img_mat.image
     img.show()
