@@ -87,6 +87,7 @@ def get_parser():
         '--day-num', '-n',
         action='store',
         dest='day_num',
+        type=int,
         help='number of considering day')
     return parser
 
