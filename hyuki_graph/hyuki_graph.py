@@ -11,6 +11,23 @@ __VERSION__ = '0.0.1'
 
 DEFAULT_NUMBER_OF_DAY = 7
 
+def get_execuable_cvss():
+    execuable_cvss = []
+    try:
+        subprocess.check_output(['git', '--version'])
+        execuable_cvss.append('git')
+    except FileNotFoundError as ex:
+        pass
+
+    try:
+        subprocess.check_output(['hg', '--version'])
+        execuable_cvss.append('hg')
+    except FileNotFoundError as ex:
+        pass
+
+    return execuable_cvss
+
+CVSS = get_execuable_cvss()
 
 def get_commits_log(commits, day_num):
     dead = '\033[91m' + "D" + '\033[0m'
@@ -46,14 +63,28 @@ def get_commits_log(commits, day_num):
     return '\n'.join(splitted_logs)
 
 
-def get_commit_numbers(path, day_num):
-    os.chdir(path)
-    if not os.path.isdir(path + '/.git'):
+def get_revision_cvs(path):
+    if ('git' in CVSS and os.path.isdir(os.path.join(path, '.git'))):
+        return 'git'
+    elif ('hg' in CVSS and os.path.isdir(os.path.join(path, '.hg'))):
+        return 'hg'
+    else:
         return None
 
-    log = subprocess.check_output(
-        ['git', 'log', '--oneline', '--date=short',
-            '--pretty=format:\"%ad\"']).decode('utf-8')
+
+def get_commit_numbers(path, day_num):
+    os.chdir(path)
+
+    cvs = get_revision_cvs(path)
+    if cvs is None:
+        return {}
+
+    if cvs == 'git':
+        log = subprocess.check_output(
+            ['git', 'log', '--oneline', '--date=short',
+                '--pretty=format:\"%ad\"']).decode('utf-8')
+    elif cvs == 'hg':
+        log = subprocess.check_output(['hg', 'log', '--style=compact'])
 
     numbers = dict()
 
@@ -74,6 +105,8 @@ def get_cvs_dirs(path):
     for p in get_children_dirs(path):
         if os.path.isdir(p + '/.git'):
             yield p
+        elif os.path.isdir(p + '/.hg'):
+            yield p
 
 
 def get_dates(day_num):
@@ -88,7 +121,8 @@ def get_str_projname(project):
 
 
 def get_parser():
-    parser = OptionParser(version=__VERSION__)
+    usage = "Usage: hyuki-graph [option] [base_dir]"
+    parser = OptionParser(usage=usage, version=__VERSION__)
     parser.add_option(
         '--day-num', '-n',
         action='store',
