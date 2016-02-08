@@ -37,20 +37,24 @@ class ImageMatrix(list):
 
     @property
     def image(self):
+        image_mat = [list(l.images) for l in self]
+
         width = 0
-        for img_y in self:
-            width += max([img.size[0] for img in img_y])
+        for images in image_mat:
+            width += max(img.size[0] for img in images)
 
         height = 0
-        for x in range(len(self)):
-            height += max([img.size[1] for img in
-                [self[y][x] for y in range(len(self))]
-            ])
-        print(width, height)
-        img = Image.new('RGB',
-                (width, height),
-                (255, 255, 255))
+        for images in [[image_mat[i][j] for i in range(len(image_mat))]
+                for j in range(len(image_mat[0]))]:
+            height += max(img.size[1] for img in images)
 
+        cell_height = 30
+        img = Image.new('RGB', (width, height), (255, 255, 255))
+        for y in range(len(image_mat)):
+            for x in range(len(image_mat[y])):
+                x_pos = sum(img.size[0] for img in image_mat[y][:x])
+                y_pos = cell_height * (y - 1)
+                img.paste(x, (x_pos, y_pos))
         return img
 
 def get_commit_numbers(path):
@@ -124,8 +128,16 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    img_list = ImageList()
-    img_list.append("Hello")
-    img_list.append("")
-    img = list(img_list.images)[1]
-    img.show()
+    image_mat = ImageMatrix()
+    image_list1 = ImageList()
+    image_list1.append("Hello1")
+    image_list1.append("World1")
+    image_mat.append(image_list1)
+
+    image_list2 = ImageList()
+    image_list2.append("Hello2")
+    image_list2.append("World2")
+    image_mat.append(image_list2)
+
+    image = image_mat.image
+    image.show()
