@@ -1,0 +1,17 @@
+# GIT
+
+# Python
+*.pyc
+
+# OSX
+.DS_Store
+
+# editors
+*.swp
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
