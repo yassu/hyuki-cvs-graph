@@ -11,13 +11,14 @@ __VERSION__ = '0.0.1'
 
 DEFAULT_NUMBER_OF_DAY = 7
 
+
 def get_commits_log(commits, day_num):
-    dead  = '\033[91m' + "D" + '\033[0m'
+    dead = '\033[91m' + "D" + '\033[0m'
     alive = '\033[92m' + "A" + '\033[0m'
     dates = list(get_dates(day_num))
     projects = set()
 
-    logs = dict() # dictionary from tuple of projname and date to dead or alive
+    logs = dict()  # dictionary from tuple of projname and date to dead or alive
     for path, commits in commits.items():
         project = get_str_projname(path)
         for date, commit_num in commits.items():
@@ -44,6 +45,7 @@ def get_commits_log(commits, day_num):
 
     return '\n'.join(splitted_logs)
 
+
 def get_commit_numbers(path, day_num):
     os.chdir(path)
     if not os.path.isdir(path + '/.git'):
@@ -61,16 +63,19 @@ def get_commit_numbers(path, day_num):
         numbers[datetime.date(year, month, day)] = log.count(_format)
     return numbers
 
+
 def get_children_dirs(path):
     yield os.path.abspath(path)
     for (_, dirs, _) in os.walk(path):
         for d in dirs:
             yield os.path.abspath(d)
 
+
 def get_cvs_dirs(path):
     for p in get_children_dirs(path):
         if os.path.isdir(p + '/.git'):
             yield p
+
 
 def get_dates(day_num):
     today = datetime.date.today()
@@ -78,8 +83,10 @@ def get_dates(day_num):
         date = today - datetime.timedelta(days=days)
         yield datetime.date(date.year, date.month, date.day)
 
+
 def get_str_projname(project):
     return project.split('/')[-1]
+
 
 def get_parser():
     parser = OptionParser(version=__VERSION__)
@@ -90,6 +97,7 @@ def get_parser():
         type=int,
         help='number of considering day')
     return parser
+
 
 def main():
     opts, args = get_parser().parse_args()
