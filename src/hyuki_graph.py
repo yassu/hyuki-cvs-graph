@@ -19,34 +19,14 @@ class ImageList(list):
     def images(self, height=30, xpad=3, ypad=3):
         font_size = 13
         font = ImageFont.truetype('FreeSans.ttf', font_size)
+        default_width = 30
         height = ypad + font_size + ypad
-        for i in range(self):
-            width = xpad + len(self[i]) + xpad
+        for i in range(len(self)):
+            width = max(xpad + len(self[i]) * font_size + xpad, default_width)
             img = Image.new('RGB', (width, height), (255, 255, 255))
             draw = ImageDraw.Draw(img)
             draw.text((0, 0), self[i], font=font, fill="#000000")
             yield img
-
-    @property
-    def image(self, height=30, xpad=3, ypad=3):
-        # width = sum()
-        font_size = 13
-        font = ImageFont.truetype('FreeSans.ttf', font_size)
-        height = ypad + font_size + ypad
-        if self:
-            width = sum([len(s) for s in self]) * font_size + \
-                (len(self) - 1)*xpad
-        else:
-            width = self._default_width
-        img = Image.new('RGB', (width, height), (255, 255, 255))
-        draw = ImageDraw.Draw(img)
-        for i in range(len(self)):
-            draw.text(
-                (sum(len(s) for s in self[:i]) * font_size,
-                0),
-                self[i],
-                font=font, fill='#000000')
-        return img
 
     def set_default_width(self, width):
         self._default_width = width
@@ -144,16 +124,8 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    img_list1 = ImageList()
-    img_list1.append("Hello")
-    img_list1.append("World")
-
-    img_list2 = ImageList()
-    img_list2.append("Hello2")
-    img_list2.append("World2")
-
-    img_mat = ImageMatrix()
-    img_mat.append(img_list1)
-    img_mat.append(img_list2)
-    img = img_mat.image
+    img_list = ImageList()
+    img_list.append("Hello")
+    img_list.append("")
+    img = list(img_list.images)[1]
     img.show()
