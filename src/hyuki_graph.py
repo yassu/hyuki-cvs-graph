@@ -16,6 +16,18 @@ class ImageList(list):
         self._default_width = None
 
     @property
+    def images(self, height=30, xpad=3, ypad=3):
+        font_size = 13
+        font = ImageFont.truetype('FreeSans.ttf', font_size)
+        height = ypad + font_size + ypad
+        for i in range(self):
+            width = xpad + len(self[i]) + xpad
+            img = Image.new('RGB', (width, height), (255, 255, 255))
+            draw = ImageDraw.Draw(img)
+            draw.text((0, 0), self[i], font=font, fill="#000000")
+            yield img
+
+    @property
     def image(self, height=30, xpad=3, ypad=3):
         # width = sum()
         font_size = 13
