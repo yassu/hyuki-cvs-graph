@@ -37,7 +37,7 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
     dead = '\033[91m' + "D" + '\033[0m'     # dead commit
     medium = '\033[93m' + "M" + '\033[0m'   # medium commit
     large = '\033[92m' + "L" + '\033[0m'    # Large commit
-    alive = '\033[92m' + "A" + '\033[0m'    # Large commit
+    alive = '\033[92m' + "A" + '\033[0m'    # Alive commit
     dates = list(get_dates(day_num))
     projects = set()
 
