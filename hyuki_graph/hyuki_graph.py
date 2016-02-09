@@ -4,7 +4,7 @@
 import os
 import sys
 import datetime
-import pprint
+# import pprint
 import subprocess
 import re
 from optparse import OptionParser
@@ -13,23 +13,25 @@ from __init__ import __VERSION__
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
 
+
 def get_execuable_cvss():
     execuable_cvss = []
     try:
         subprocess.check_output(['git', '--version'])
         execuable_cvss.append('git')
-    except FileNotFoundError as ex:
+    except FileNotFoundError:
         pass
 
     try:
         subprocess.check_output(['hg', '--version'])
         execuable_cvss.append('hg')
-    except FileNotFoundError as ex:
+    except FileNotFoundError:
         pass
 
     return execuable_cvss
 
 CVSS = get_execuable_cvss()
+
 
 def get_commits_log(commits, day_num, medium_sep):
     dead = '\033[91m' + "D" + '\033[0m'     # dead commit
@@ -46,7 +48,7 @@ def get_commits_log(commits, day_num, medium_sep):
                 logs[(project, date)] = dead
             elif commit_num < medium_sep - 1:
                 logs[(project, date)] = medium
-            else: # commit_num >= medium_sep
+            else:  # commit_num >= medium_sep
                 logs[(project, date)] = large
             projects.add(project)
 
@@ -104,7 +106,7 @@ def get_commit_numbers(path, day_num, author):
                 '--pretty=format:\"%ad\"%an']).decode('utf-8')
     elif cvs == 'hg':
         log = subprocess.check_output(['hg', 'log', '--style=compact']
-                                     ).decode('utf-8')
+                                      ).decode('utf-8')
 
     numbers = dict()
 
@@ -163,8 +165,8 @@ def get_parser():
         default=DEFAULT_MEDIUM_SEP,
         type=int,
         help=('If number of commit is less than this value, '
-            'L is written.')
-        )
+              'L is written.')
+    )
     return parser
 
 
