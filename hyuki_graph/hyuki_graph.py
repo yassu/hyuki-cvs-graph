@@ -53,7 +53,7 @@ def get_commits_log(commits, day_num, medium_sep):
             projects.add(project)
 
     if projects == set():
-        sys.stderr.write("WARNING: There doesn't exist repository which"
+        sys.stderr.write("WARNING: There doesn't exist repository which "
                          "this program can display.\n")
         sys.exit()
 
