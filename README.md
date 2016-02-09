@@ -45,7 +45,7 @@ Option
 ==========================
 
 ``` bash
-% pip install hyuki-graph
+% pip install hyuki-cvs-graph
 ```
 
 もしくはこのプロジェクトをクローンして, このプロジェクトの直下で
