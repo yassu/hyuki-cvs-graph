@@ -4,7 +4,7 @@ Hyuki-CVS-Graph
     :target: https://travis-ci.org/yassu/hyuki-cvs-graph
 
 This is a tool like as  `taking-star-table with color <https://note.mu/hyuki/n/n9a6e7c1e0d7b>`__ (ja),
-which considered by Mr. Hyuki(ja).
+which considered by Mr. Hyuki.
 
 This tool makes table which is written project-name, day number from today and commit-status.
 
