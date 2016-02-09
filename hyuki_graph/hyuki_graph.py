@@ -6,6 +6,7 @@ import sys
 import datetime
 import pprint
 import subprocess
+import re
 from optparse import OptionParser
 from __init__ import __VERSION__
 
@@ -83,7 +84,7 @@ def get_revision_cvs(path):
         return None
 
 
-def get_commit_numbers(path, day_num):
+def get_commit_numbers(path, day_num, author):
     os.chdir(path)
 
     cvs = get_revision_cvs(path)
@@ -93,16 +94,20 @@ def get_commit_numbers(path, day_num):
     if cvs == 'git':
         log = subprocess.check_output(
             ['git', 'log', '--oneline', '--date=short',
-                '--pretty=format:\"%ad\"']).decode('utf-8')
+                '--pretty=format:\"%ad\"%an']).decode('utf-8')
     elif cvs == 'hg':
-        log = subprocess.check_output(['hg', 'log', '--style=compact'])
+        log = subprocess.check_output(['hg', 'log', '--style=compact']
+                                     ).decode('utf-8')
 
     numbers = dict()
 
     for date in get_dates(day_num):
         year, month, day = date.year, date.month, date.day
         _format = "%04d-%02d-%02d" % (year, month, day)
-        numbers[datetime.date(year, month, day)] = log.count(_format)
+        pat = r"\b" + _format + r"\b"
+        if author is not None:
+            pat += r".*\b" + author + r"\b"
+        numbers[datetime.date(year, month, day)] = len(re.findall(pat, log))
     return numbers
 
 
@@ -140,6 +145,11 @@ def get_parser():
         dest='day_num',
         type=int,
         help='number of considering day')
+    parser.add_option(
+        '--author', '-a',
+        action='store',
+        dest='author',
+        help='indicate author name')
     return parser
 
 
@@ -152,7 +162,7 @@ def main():
     commits = dict()
     projects = list(get_cvs_dirs(base_path))
     for path in projects:
-        commits[path] = get_commit_numbers(path, opts.day_num)
+        commits[path] = get_commit_numbers(path, opts.day_num, opts.author)
 
     commits_log = get_commits_log(commits, opts.day_num)
     print(commits_log)
