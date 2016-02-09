@@ -165,7 +165,7 @@ def get_parser():
         default=DEFAULT_MEDIUM_SEP,
         type=int,
         help=('If number of commit is less than this value, '
-              'L is written.')
+              'M is written.')
     )
     return parser
 
