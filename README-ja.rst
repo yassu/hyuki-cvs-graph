@@ -1,5 +1,7 @@
 Hyuki-CVS-Graph
 ===============
+.. image:: https://travis-ci.org/yassu/hyuki-cvs-graph.svg?branch=master
+    :target: https://travis-ci.org/yassu/hyuki-cvs-graph
 
 結城先生が考えておられる\ `色つき星取表 <https://note.mu/hyuki/n/n9a6e7c1e0d7b>`__\ と同様のことを
 CVSを用いて自動的に行うためのソフトです.
