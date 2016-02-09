@@ -31,8 +31,10 @@ def get_execuable_cvss():
 CVSS = get_execuable_cvss()
 
 def get_commits_log(commits, day_num):
-    dead = '\033[91m' + "D" + '\033[0m'
-    alive = '\033[92m' + "A" + '\033[0m'
+    dead = '\033[91m' + "D" + '\033[0m'     # dead commit
+    medium = '\033[93m' + "M" + '\033[0m'   # medium commit
+    large = '\033[92m' + "L" + '\033[0m'    # Large commit
+    medium_sep = 10
     dates = list(get_dates(day_num))
     projects = set()
 
@@ -40,7 +42,12 @@ def get_commits_log(commits, day_num):
     for path, commits in commits.items():
         project = get_str_projname(path)
         for date, commit_num in commits.items():
-            logs[(project, date)] = alive if (commit_num > 0) else dead
+            if commit_num == 0:
+                logs[(project, date)] = dead
+            elif commit_num < 10 - 1:
+                logs[(project, date)] = medium
+            else: # commit_num >= 10
+                logs[(project, date)] = large
             projects.add(project)
 
     if projects == set():
@@ -106,7 +113,7 @@ def get_commit_numbers(path, day_num, author):
         _format = "%04d-%02d-%02d" % (year, month, day)
         pat = r"\b" + _format + r"\b"
         if author is not None:
-            pat += r".*\b" + author + r"\b"
+            pat += r".*\b(" + "|".join(author.split()) + r")\b"
         numbers[datetime.date(year, month, day)] = len(re.findall(pat, log))
     return numbers
 
