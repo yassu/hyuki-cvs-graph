@@ -11,6 +11,7 @@ from optparse import OptionParser
 from __init__ import __VERSION__
 
 DEFAULT_NUMBER_OF_DAY = 7
+DEFAULT_MEDIUM_SEP = 10
 
 def get_execuable_cvss():
     execuable_cvss = []
@@ -30,11 +31,10 @@ def get_execuable_cvss():
 
 CVSS = get_execuable_cvss()
 
-def get_commits_log(commits, day_num):
+def get_commits_log(commits, day_num, medium_sep):
     dead = '\033[91m' + "D" + '\033[0m'     # dead commit
     medium = '\033[93m' + "M" + '\033[0m'   # medium commit
     large = '\033[92m' + "L" + '\033[0m'    # Large commit
-    medium_sep = 10
     dates = list(get_dates(day_num))
     projects = set()
 
@@ -44,9 +44,9 @@ def get_commits_log(commits, day_num):
         for date, commit_num in commits.items():
             if commit_num == 0:
                 logs[(project, date)] = dead
-            elif commit_num < 10 - 1:
+            elif commit_num < medium_sep - 1:
                 logs[(project, date)] = medium
-            else: # commit_num >= 10
+            else: # commit_num >= medium_sep
                 logs[(project, date)] = large
             projects.add(project)
 
@@ -157,6 +157,14 @@ def get_parser():
         action='store',
         dest='author',
         help='indicate author name')
+    parser.add_option(
+        '-m', '--medium-sep',
+        action='store',
+        default=DEFAULT_MEDIUM_SEP,
+        type=int,
+        help=('If number of commit is less than this value, '
+            'L is written.')
+        )
     return parser
 
 
@@ -171,7 +179,7 @@ def main():
     for path in projects:
         commits[path] = get_commit_numbers(path, opts.day_num, opts.author)
 
-    commits_log = get_commits_log(commits, opts.day_num)
+    commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep)
     print(commits_log)
 
 
