@@ -45,8 +45,8 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
         status_func = lambda c: dead if c == 0 else alive
     else:
         status_func = lambda c: dead if c == 0 else \
-                                medium if c < medium_sep - 1 else \
-                                large
+            medium if c < medium_sep - 1 else \
+            large
 
     logs = dict()  # dictionary from tuple of projname and date to dead or alive
     for path, commits in commits.items():
@@ -110,8 +110,8 @@ def get_commit_numbers(path, day_num, author):
     elif cvs == 'hg':
         log = subprocess.check_output(
             ['hg', 'log',
-            '--template', r'{date|shortdate} {author|person}\n'
-            ]).decode('utf-8')
+             '--template', r'{date|shortdate} {author|person}\n'
+             ]).decode('utf-8')
 
     numbers = dict()
 
