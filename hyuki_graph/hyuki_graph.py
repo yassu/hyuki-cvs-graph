@@ -8,7 +8,7 @@ import datetime
 import subprocess
 import re
 from optparse import OptionParser
-from __init__ import __VERSION__
+from hyuki_graph import __VERSION__
 
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
@@ -147,7 +147,7 @@ def get_dates(day_num):
 
 
 def get_str_projname(project):
-    return project.split(os.path.sep)[-1]
+    return os.path.abspath(project).split(os.path.sep)[-1]
 
 
 def get_parser():
