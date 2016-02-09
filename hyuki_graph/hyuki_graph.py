@@ -12,7 +12,7 @@ from optparse import OptionParser
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
 
-__VERSION__ = '0.0.6'
+__VERSION__ = '0.1.0'
 
 def get_execuable_cvss():
     execuable_cvss = []
