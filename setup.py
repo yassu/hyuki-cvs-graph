@@ -1,5 +1,6 @@
 from setuptools import setup
-from hyuki_graph import __VERSION__
+
+__VERSION__ = '0.0.6'
 
 classifiers = [
     'Development Status :: 3 - Alpha',
@@ -19,7 +20,7 @@ setup(
     name='hyuki-cvs-graph',
     version=__VERSION__,
     description='view graph for working log',
-    # long_description=open('README.rst').read(),
+    long_description=open('README.rst').read(),
     author='Yassu',
     author_email='mathyassu@gmail.com',
     url='https://github.com/yassu/hyuki-cvs-graph',

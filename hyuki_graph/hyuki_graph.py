@@ -8,11 +8,11 @@ import datetime
 import subprocess
 import re
 from optparse import OptionParser
-from hyuki_graph import __VERSION__
 
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
 
+__VERSION__ = '0.0.6'
 
 def get_execuable_cvss():
     execuable_cvss = []
