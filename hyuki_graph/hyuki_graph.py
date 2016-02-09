@@ -165,7 +165,7 @@ def get_parser():
         dest='author',
         help='indicate author name')
     parser.add_option(
-        '-m', '--medium-sep',
+        '--medium-sep', '-m',
         action='store',
         default=DEFAULT_MEDIUM_SEP,
         type=int,
@@ -173,7 +173,7 @@ def get_parser():
               'M is written.')
     )
     parser.add_option(
-        '--DA', '--dead-or-alive',
+        '--dead-or-alive', '--DA',
         action='store_true',
         dest='is_dead_or_alive',
         help=('show only D and A')
