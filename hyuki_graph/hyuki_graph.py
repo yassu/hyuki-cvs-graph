@@ -48,7 +48,7 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
             medium if c < medium_sep - 1 else \
             large
 
-    logs = dict()  # dictionary from tuple of projname and date to dead or alive
+    logs = dict()  # dictionary from tuple of projname and date to status
     for path, commits in commits.items():
         project = get_str_projname(path)
         for date, commit_num in commits.items():
