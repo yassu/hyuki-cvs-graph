@@ -102,7 +102,7 @@ def get_commit_numbers(path, day_num, author):
 
     if cvs == 'git':
         log = subprocess.check_output(
-            ['git', 'log', '--oneline', '--date=short',
+            ['git', 'reflog', '--oneline', '--date=short',
                 '--pretty=format:\"%ad\"%an']).decode('utf-8')
     elif cvs == 'hg':
         log = subprocess.check_output(['hg', 'log', '--style=compact']
