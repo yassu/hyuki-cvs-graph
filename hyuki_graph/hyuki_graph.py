@@ -103,11 +103,11 @@ def get_commit_numbers(path, day_num, author):
     if cvs == 'git':
         log = subprocess.check_output(
             ['git', 'reflog', '--oneline', '--date=short',
-                '--pretty=format:[%ad]%an']).decode('utf-8')
+                '--pretty=format:%ad %an']).decode('utf-8')
     elif cvs == 'hg':
         log = subprocess.check_output(
             ['hg', 'log',
-            '--template', r'[{date|shortdate}]{author|person}\n'
+            '--template', r'{date|shortdate} {author|person}\n'
             ]).decode('utf-8')
 
     numbers = dict()
@@ -117,7 +117,7 @@ def get_commit_numbers(path, day_num, author):
         _format = "%04d-%02d-%02d" % (year, month, day)
         pat = r"\b" + _format + r"\b"
         if author is not None:
-            pat += r".*\b(" + "|".join(author.split()) + r")\b"
+            pat += r" \b(" + "|".join(author.split()) + r")\b"
         numbers[datetime.date(year, month, day)] = len(re.findall(pat, log))
     return numbers
 
