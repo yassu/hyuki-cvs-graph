@@ -33,23 +33,26 @@ def get_execuable_cvss():
 CVSS = get_execuable_cvss()
 
 
-def get_commits_log(commits, day_num, medium_sep):
+def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
     dead = '\033[91m' + "D" + '\033[0m'     # dead commit
     medium = '\033[93m' + "M" + '\033[0m'   # medium commit
     large = '\033[92m' + "L" + '\033[0m'    # Large commit
+    alive = '\033[92m' + "A" + '\033[0m'    # Large commit
     dates = list(get_dates(day_num))
     projects = set()
+
+    if dead_or_alive:
+        status_func = lambda c: dead if c == 0 else alive
+    else:
+        status_func = lambda c: dead if c == 0 else \
+                                medium if c < medium_sep - 1 else \
+                                large
 
     logs = dict()  # dictionary from tuple of projname and date to dead or alive
     for path, commits in commits.items():
         project = get_str_projname(path)
         for date, commit_num in commits.items():
-            if commit_num == 0:
-                logs[(project, date)] = dead
-            elif commit_num < medium_sep - 1:
-                logs[(project, date)] = medium
-            else:  # commit_num >= medium_sep
-                logs[(project, date)] = large
+            logs[(project, date)] = status_func(commit_num)
             projects.add(project)
 
     if projects == set():
@@ -169,6 +172,12 @@ def get_parser():
         help=('If number of commit is less than this value, '
               'M is written.')
     )
+    parser.add_option(
+        '--DA', '--dead-or-alive',
+        action='store_true',
+        dest='is_dead_or_alive',
+        help=('show only D and A')
+    )
     return parser
 
 
@@ -183,7 +192,8 @@ def main():
     for path in projects:
         commits[path] = get_commit_numbers(path, opts.day_num, opts.author)
 
-    commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep)
+    commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
+                                  opts.is_dead_or_alive)
     print(commits_log)
 
 
