@@ -1,5 +1,6 @@
 Hyuki-CVS-Graph
 ===============
+[![Build Status](https://travis-ci.org/yassu/hyuki-cvs-graph.svg?branch=master)](https://travis-ci.org/yassu/hyuki-cvs-graph)
 
 This is a tool like as  `taking-star-table with color <https://note.mu/hyuki/n/n9a6e7c1e0d7b>`__ (ja),
 which considered by Mr. Hyuki(ja).
