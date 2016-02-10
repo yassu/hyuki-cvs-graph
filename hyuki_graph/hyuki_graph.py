@@ -13,6 +13,7 @@ from collections import defaultdict
 
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
+DEFAULT_USE_FILE = 'hyuki_graph.json'
 
 __VERSION__ = '0.1.0'
 
@@ -47,6 +48,19 @@ def get_date_from_text(text):
         return datetime.date(int(year), int(month), int(day))
     except ValueError:
         raise TypeError('{} is not in range for date.'.format(text))
+
+def get_commits_from_textfile(use_files=DEFAULT_USE_FILE):
+    use_filenames = DEFAULT_USE_FILE.split()
+    commits = dict()
+
+    if not os.path.isfile(DEFAULT_USE_FILE):
+        return {}
+    else:
+        for fname in use_filenames:
+            with open(fname) as f:
+                commits.update(get_commits_from_text(f.read()))
+    print(commits)
+    return commits
 
 def get_commits_from_text(text):
     jdata = json.loads(text)
@@ -220,6 +234,7 @@ def main():
     projects = list(get_cvs_dirs(base_path))
     for path in projects:
         commits[path] = get_commit_numbers(path, opts.day_num, opts.author)
+    commits.update(get_commits_from_textfile())
 
     commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
                                   opts.is_dead_or_alive)
