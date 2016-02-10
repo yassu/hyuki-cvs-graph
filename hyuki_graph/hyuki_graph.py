@@ -34,18 +34,29 @@ def get_execuable_cvss():
 
 CVSS = get_execuable_cvss()
 
+def get_date_from_text(text):
+    if (len(text.split(os.path.sep)) != 3):
+        raise TypeError('{} is illegal as a date.'.format(text))
+
+    year, month, day = text.split(os.path.sep)
+    if (not year.isdigit() or
+            not month.isdigit() or
+            not day.isdigit()):
+        raise TypeError('{} is illegal as a date.'.format(text))
+    try:
+        return datetime.date(int(year), int(month), int(day))
+    except ValueError:
+        raise TypeError('{} is not in range for date.'.format(text))
+
 def get_commits_from_text(text):
     jdata = json.loads(text)
     true_data = defaultdict(lambda: defaultdict(int))
     for proj, date_status in jdata.items():
         dates = date_status.keys()
-        for _date in dates:
-            year, month, day = _date.split('/')
-            year = int(year)
-            month = int(month)
-            day = int(day)
-            true_data[proj][datetime.date(year, month, day)] = \
-                date_status[_date]
+        for date in dates:
+            date_d = get_date_from_text(date)
+            true_data[proj][date_d] = \
+                date_status[date]
     return true_data
 
 

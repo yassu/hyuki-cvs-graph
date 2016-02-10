@@ -1,11 +1,38 @@
 #!/usr/bin/env python
 # coding: UTF-8
 
+from nose.tools import raises
 from hyuki_graph.hyuki_graph import(
-    get_dates, get_str_projname, get_commits_from_text
+    get_dates, get_str_projname, get_commits_from_text,
+    get_date_from_text
     )
 from datetime import date, timedelta
 import os.path
+
+def get_date_from_text_test1():
+    assert(get_date_from_text('2015/03/21') ==
+            date(2015, 3, 21))
+
+@raises(TypeError)
+def get_date_from_text_test2():
+    get_date_from_text('bear')
+
+@raises(TypeError)
+def get_date_from_text_test3():
+    get_date_from_text('year/02/03')
+
+
+@raises(TypeError)
+def get_date_from_text_test4():
+    get_date_from_text('2015/month/03')
+
+@raises(TypeError)
+def get_date_from_text_test5():
+    get_date_from_text('2015/02/day')
+
+@raises(TypeError)
+def get_date_from_text_test6():
+    get_date_from_text('2015/02/99')
 
 def get_commits_from_text_test0():
     text = '{}'
