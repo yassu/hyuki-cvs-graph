@@ -8,6 +8,8 @@ import datetime
 import subprocess
 import re
 from optparse import OptionParser
+import json
+from collections import defaultdict
 
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
@@ -31,6 +33,20 @@ def get_execuable_cvss():
     return execuable_cvss
 
 CVSS = get_execuable_cvss()
+
+def get_commits_from_text(text):
+    jdata = json.loads(text)
+    true_data = defaultdict(lambda: defaultdict(int))
+    for proj, date_status in jdata.items():
+        dates = date_status.keys()
+        for _date in dates:
+            year, month, day = _date.split('/')
+            year = int(year)
+            month = int(month)
+            day = int(day)
+            true_data[proj][datetime.date(year, month, day)] = \
+                date_status[_date]
+    return true_data
 
 
 def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
