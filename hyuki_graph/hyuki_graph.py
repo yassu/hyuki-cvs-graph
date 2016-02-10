@@ -69,8 +69,7 @@ def get_commits_from_text(text):
         dates = date_status.keys()
         for date in dates:
             date_d = get_date_from_text(date)
-            true_data[proj][date_d] = \
-                date_status[date]
+            true_data[proj][date_d] = date_status[date]
     return true_data
 
 
