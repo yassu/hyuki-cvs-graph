@@ -124,6 +124,7 @@ def get_revision_cvs(path):
 
 
 def get_commit_numbers(path, day_num, author):
+    first_chdir = os.getcwd()
     os.chdir(path)
 
     cvs = get_revision_cvs(path)
@@ -149,6 +150,7 @@ def get_commit_numbers(path, day_num, author):
         if author is not None:
             pat += r" \b(" + "|".join(author.split()) + r")\b"
         numbers[datetime.date(year, month, day)] = len(re.findall(pat, log))
+    os.chdir(first_chdir)
     return numbers
 
 
