@@ -3,11 +3,35 @@
 
 from nose.tools import raises
 from hyuki_graph.hyuki_graph import(
+    DEFAULT_MEDIUM_SEP,
+    DEAD, ALIVE, MEDIUM, LARGE,
+    get_dead_or_alive_number, get_dead_medium_or_large,
     get_dates, get_str_projname, get_commits_from_text,
     get_date_from_text, fill_commits_by_zero, update_as_commits
     )
 from datetime import date, timedelta
 import os.path
+
+def get_dead_medium_or_large_test0():
+    assert(get_dead_medium_or_large(0) == DEAD)
+
+def get_dead_medium_or_large_test2():
+    assert(get_dead_medium_or_large(1) == MEDIUM)
+
+def get_dead_medium_or_large_test2():
+    assert(get_dead_medium_or_large(DEFAULT_MEDIUM_SEP - 1) == MEDIUM)
+
+def get_dead_medium_or_large_test1():
+    assert(get_dead_medium_or_large(DEFAULT_MEDIUM_SEP) == LARGE)
+
+def get_dead_or_alive_number_test0():
+    assert(get_dead_or_alive_number(0) == DEAD)
+
+def get_dead_or_alive_number_test1():
+    assert(get_dead_or_alive_number(1) == ALIVE)
+
+def get_dead_or_alive_number_test2():
+    assert(get_dead_or_alive_number(10) == ALIVE)
 
 def get_date_from_text_test1():
     assert(get_date_from_text('2015/03/21') ==

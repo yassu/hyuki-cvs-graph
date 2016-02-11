@@ -12,11 +12,16 @@ from optparse import OptionParser
 import json
 from collections import defaultdict
 
+__VERSION__ = '0.1.0'
+
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
 DEFAULT_USE_FILE = 'hyuki_graph.json'
 
-__VERSION__ = '0.1.0'
+DEAD = '\033[91m' + "D" + '\033[0m'     # dead commit
+MEDIUM = '\033[93m' + "M" + '\033[0m'   # medium commit
+LARGE = '\033[92m' + "L" + '\033[0m'    # Large commit
+ALIVE = '\033[92m' + "A" + '\033[0m'    # Alive commit
 
 def get_execuable_cvss():
     execuable_cvss = []
@@ -35,6 +40,20 @@ def get_execuable_cvss():
     return execuable_cvss
 
 CVSS = get_execuable_cvss()
+
+def get_dead_medium_or_large(n, medium_sep=DEFAULT_MEDIUM_SEP):
+    if n == 0:
+        return DEAD
+    elif n < medium_sep:
+        return MEDIUM
+    else:
+        return LARGE
+
+def get_dead_or_alive_number(n, medium_sep=DEFAULT_MEDIUM_SEP):
+    if n == 0:
+        return DEAD
+    else:
+        return ALIVE
 
 def get_date_from_text(text):
     if (len(text.split(os.path.sep)) != 3):
@@ -74,25 +93,19 @@ def get_commits_from_text(text):
 
 
 def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
-    dead = '\033[91m' + "D" + '\033[0m'     # dead commit
-    medium = '\033[93m' + "M" + '\033[0m'   # medium commit
-    large = '\033[92m' + "L" + '\033[0m'    # Large commit
-    alive = '\033[92m' + "A" + '\033[0m'    # Alive commit
     dates = list(get_dates(day_num))
     projects = set()
 
     if dead_or_alive:
-        status_func = lambda c: dead if c == 0 else alive
+        status_func = get_dead_or_alive_number
     else:
-        status_func = lambda c: dead if c == 0 else \
-            medium if c < medium_sep - 1 else \
-            large
+        status_func = get_dead_medium_or_large
 
     logs = dict()  # dictionary from tuple of projname and date to status
     for path, commits in commits.items():
         project = get_str_projname(path)
         for date, commit_num in commits.items():
-            logs[(project, date)] = status_func(commit_num)
+            logs[(project, date)] = status_func(commit_num, medium_sep)
             projects.add(project)
 
     if projects == set():
