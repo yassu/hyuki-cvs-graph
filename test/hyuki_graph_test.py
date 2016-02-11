@@ -60,11 +60,11 @@ def get_date_from_text_test6():
 
 def get_commits_from_text_test0():
     text = '{}'
-    assert(get_commits_from_text(text) == {})
+    assert(get_commits_from_text(text, 'json') == {})
 
 def get_commits_from_text_test1():
     text = '{"proj1": {"2016/01/01": 3}}'
-    assert(get_commits_from_text(text) ==
+    assert(get_commits_from_text(text, 'json') ==
         {'proj1':
             {date(2016, 1, 1): 3}}
         )
@@ -72,7 +72,7 @@ def get_commits_from_text_test1():
 def get_commits_from_text_test2():
     text = ('{"proj1": {"2016/01/01": 3,'
                       '"2016/01/03": 5}}')
-    assert(get_commits_from_text(text) ==
+    assert(get_commits_from_text(text, 'json') ==
         {'proj1': {
             date(2016, 1, 1): 3,
             date(2016, 1, 3): 5}})
@@ -83,7 +83,7 @@ def get_commits_from_text_test3():
             ' "proj2": {"2016/01/02": 4,'
                        '"2016/01/04": 6}}'
             )
-    assert(get_commits_from_text(text) ==
+    assert(get_commits_from_text(text, 'json') ==
         {'proj1': {
             date(2016, 1, 1): 3,
             date(2016, 1, 3): 5},
