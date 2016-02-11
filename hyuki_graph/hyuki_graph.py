@@ -5,7 +5,7 @@ import os
 import sys
 import datetime
 from copy import deepcopy
-import pprint
+# import pprint
 import subprocess
 import re
 from optparse import OptionParser
@@ -268,6 +268,13 @@ def get_parser():
         dest='filenames',
         help='indicate all filenames that you want to use'
     )
+    parser.add_option(
+        '--FO', '--file-only',
+        action='store_true',
+        default=False,
+        dest='is_file_only',
+        help='this program not watch cvs directories.'
+    )
     return parser
 
 
@@ -278,9 +285,13 @@ def main():
     base_path = os.path.abspath('.' if len(args) == 0 else args[0])
 
     commits = dict()
-    projects = list(get_cvs_dirs(base_path))
-    for path in projects:
-        commits[get_str_projname(path)] = get_commit_numbers(path, opts.day_num, opts.author)
+
+    if not opts.is_file_only:
+        projects = list(get_cvs_dirs(base_path))
+        for path in projects:
+            commits[get_str_projname(path)] = get_commit_numbers(
+                path, opts.day_num, opts.author)
+
     commits_from_textfile = fill_commits_by_zero(
         get_commits_from_textfile(opts.filenames))
     commits = update_as_commits(commits, commits_from_textfile)
