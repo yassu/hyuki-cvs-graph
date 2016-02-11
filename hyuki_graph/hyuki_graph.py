@@ -73,8 +73,10 @@ def get_date_from_text(text):
     except ValueError:
         raise TypeError('{} is not in range for date.'.format(text))
 
-def get_commits_from_textfile(use_files=DEFAULT_USE_FILENAME):
+def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME):
     use_filenames = use_files.split()
+    for i in range(len(use_filenames)):
+        use_filenames[i] = os.path.join(base_path, use_filenames[i])
     commits = dict()
 
     for fname in use_filenames:
@@ -293,7 +295,7 @@ def main():
                 path, opts.day_num, opts.author)
 
     commits_from_textfile = fill_commits_by_zero(
-        get_commits_from_textfile(opts.filenames))
+        get_commits_from_textfile(base_path, opts.filenames))
     commits = update_as_commits(commits, commits_from_textfile)
     # pprint.pprint(commits)
 
