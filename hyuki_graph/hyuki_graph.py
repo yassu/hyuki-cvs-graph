@@ -13,7 +13,7 @@ import json
 import yaml
 from collections import defaultdict
 
-__VERSION__ = '0.1.0'
+__VERSION__ = '0.2.0'
 
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
