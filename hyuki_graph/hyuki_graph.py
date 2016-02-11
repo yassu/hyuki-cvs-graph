@@ -5,7 +5,7 @@ import os
 import sys
 import datetime
 from copy import deepcopy
-import pprint
+# import pprint
 import subprocess
 import re
 from optparse import OptionParser
@@ -17,7 +17,7 @@ __VERSION__ = '0.1.0'
 
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
-DEFAULT_USE_FILENAME = 'hyuki_graph.yaml hyuki_graph.json'
+DEFAULT_USE_FILENAME = ' hyuki_graph.json hyuki_graph.yaml'
 
 DEAD = '\033[91m' + "D" + '\033[0m'     # dead commit
 MEDIUM = '\033[93m' + "M" + '\033[0m'   # medium commit
@@ -73,8 +73,11 @@ def get_date_from_text(text):
     except ValueError:
         raise TypeError('{} is not in range for date.'.format(text))
 
-def get_commits_from_textfile(use_files=DEFAULT_USE_FILENAME):
+def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME):
     use_filenames = use_files.split()
+    for i in range(len(use_filenames)):
+        use_filenames[i] = os.path.join(base_path, use_filenames[i])
+
     commits = dict()
 
     for fname in use_filenames:
@@ -268,6 +271,13 @@ def get_parser():
         dest='filenames',
         help='indicate all filenames that you want to use'
     )
+    parser.add_option(
+        '--FO', '--file-only',
+        action='store_true',
+        default=False,
+        dest='is_file_only',
+        help='this program not watch cvs directories.'
+    )
     return parser
 
 
@@ -279,10 +289,16 @@ def main():
 
     commits = dict()
     projects = list(get_cvs_dirs(base_path))
-    for path in projects:
-        commits[get_str_projname(path)] = get_commit_numbers(path, opts.day_num, opts.author)
+
+    if not opts.is_file_only:
+        projects = list(get_cvs_dirs(base_path))
+        for path in projects:
+            commits[get_str_projname(path)] = get_commit_numbers(
+                path, opts.day_num, opts.author)
+
     commits_from_textfile = fill_commits_by_zero(
-        get_commits_from_textfile(opts.filenames))
+        get_commits_from_textfile(base_path, opts.filenames))
+
     commits = update_as_commits(commits, commits_from_textfile)
     # pprint.pprint(commits)
 
