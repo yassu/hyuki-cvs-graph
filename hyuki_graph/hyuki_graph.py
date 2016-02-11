@@ -74,13 +74,12 @@ def get_date_from_text(text):
         raise TypeError('{} is not in range for date.'.format(text))
 
 def get_commits_from_textfile(use_files=DEFAULT_USE_FILENAME):
-    use_filenames = DEFAULT_USE_FILENAME.split()
-    print(use_filenames)
+    use_filenames = use_files.split()
     commits = dict()
 
     for fname in use_filenames:
         if not os.path.isfile(fname):
-            return {}
+            continue
 
         with open(fname) as f:
             ext = (os.path.splitext(fname)[-1])[1:]
@@ -92,7 +91,6 @@ def get_commits_from_text(text, ext):
         load_func = json.loads
     elif ext == 'yaml':
         load_func = yaml.load
-    print(ext)
     jdata = load_func(text)
     true_data = defaultdict(lambda: defaultdict(int))
     for proj, date_status in jdata.items():
@@ -263,6 +261,13 @@ def get_parser():
         dest='is_dead_or_alive',
         help=('show only D and A')
     )
+    parser.add_option(
+        '--file', '-f',
+        action='store',
+        default=DEFAULT_USE_FILENAME,
+        dest='filenames',
+        help='indicate all filenames that you want to use'
+    )
     return parser
 
 
@@ -276,7 +281,8 @@ def main():
     projects = list(get_cvs_dirs(base_path))
     for path in projects:
         commits[get_str_projname(path)] = get_commit_numbers(path, opts.day_num, opts.author)
-    commits_from_textfile = fill_commits_by_zero(get_commits_from_textfile())
+    commits_from_textfile = fill_commits_by_zero(
+        get_commits_from_textfile(opts.filenames))
     commits = update_as_commits(commits, commits_from_textfile)
     # pprint.pprint(commits)
 
