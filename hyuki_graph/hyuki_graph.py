@@ -10,6 +10,7 @@ import subprocess
 import re
 from optparse import OptionParser
 import json
+import yaml
 from collections import defaultdict
 
 __VERSION__ = '0.1.0'
@@ -17,6 +18,7 @@ __VERSION__ = '0.1.0'
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
 DEFAULT_USE_FILE = 'hyuki_graph.json'
+DEFAULT_USE_FILENAME = 'hyuki_graph.yaml'
 
 DEAD = '\033[91m' + "D" + '\033[0m'     # dead commit
 MEDIUM = '\033[93m' + "M" + '\033[0m'   # medium commit
@@ -41,6 +43,7 @@ def get_execuable_cvss():
 
 CVSS = get_execuable_cvss()
 
+
 def get_dead_medium_or_large(n, medium_sep=DEFAULT_MEDIUM_SEP):
     if n == 0:
         return DEAD
@@ -54,6 +57,8 @@ def get_dead_or_alive_number(n, medium_sep=DEFAULT_MEDIUM_SEP):
         return DEAD
     else:
         return ALIVE
+
+
 
 def get_date_from_text(text):
     if (len(text.split(os.path.sep)) != 3):
@@ -69,11 +74,11 @@ def get_date_from_text(text):
     except ValueError:
         raise TypeError('{} is not in range for date.'.format(text))
 
-def get_commits_from_textfile(use_files=DEFAULT_USE_FILE):
-    use_filenames = DEFAULT_USE_FILE.split()
+def get_commits_from_textfile(use_files=DEFAULT_USE_FILENAME):
+    use_filenames = DEFAULT_USE_FILENAME.split()
     commits = dict()
 
-    if not os.path.isfile(DEFAULT_USE_FILE):
+    if not os.path.isfile(DEFAULT_USE_FILENAME):
         return {}
     else:
         for fname in use_filenames:
@@ -81,15 +86,19 @@ def get_commits_from_textfile(use_files=DEFAULT_USE_FILE):
                 commits.update(get_commits_from_text(f.read()))
     return commits
 
-def get_commits_from_text(text):
-    jdata = json.loads(text)
+def get_commits_from_text(text, ext):
+    if ext == 'json':
+        load_func = json.loads
+    elif ext == 'yaml':
+        load_func = yaml.load
+    jdata = load_func(text)
     true_data = defaultdict(lambda: defaultdict(int))
     for proj, date_status in jdata.items():
         dates = date_status.keys()
         for date in dates:
             date_d = get_date_from_text(date)
             true_data[proj][date_d] = date_status[date]
-    return true_data
+    return dict(true_data)
 
 
 def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
