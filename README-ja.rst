@@ -9,7 +9,6 @@ CVSを用いて自動的に行うためのソフトです.
 .. figure:: https://raw.githubusercontent.com/yassu/hyuki-cvs-graph/master/imgs/example.gif
    :alt: example
 
-   example
 このソフトは,
 現在ディレクトリの下にあるすべてのgitおよびhgのリポジトリからプロジェクト名を
 縦, 日数を横に書いてある表を作成します.
