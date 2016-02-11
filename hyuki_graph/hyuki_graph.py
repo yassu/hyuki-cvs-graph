@@ -5,7 +5,7 @@ import os
 import sys
 import datetime
 from copy import deepcopy
-# import pprint
+import pprint
 import subprocess
 import re
 from optparse import OptionParser
@@ -60,7 +60,6 @@ def get_commits_from_textfile(use_files=DEFAULT_USE_FILE):
         for fname in use_filenames:
             with open(fname) as f:
                 commits.update(get_commits_from_text(f.read()))
-    print(commits)
     return commits
 
 def get_commits_from_text(text):
@@ -252,9 +251,10 @@ def main():
     commits = dict()
     projects = list(get_cvs_dirs(base_path))
     for path in projects:
-        commits[path] = get_commit_numbers(path, opts.day_num, opts.author)
+        commits[get_str_projname(path)] = get_commit_numbers(path, opts.day_num, opts.author)
     commits_from_textfile = fill_commits_by_zero(get_commits_from_textfile())
-    commits.update(commits_from_textfile)
+    commits = update_as_commits(commits, commits_from_textfile)
+    # pprint.pprint(commits)
 
     commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
                                   opts.is_dead_or_alive)
