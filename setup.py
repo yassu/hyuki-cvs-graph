@@ -24,6 +24,7 @@ setup(
     author='Yassu',
     author_email='mathyassu@gmail.com',
     url='https://github.com/yassu/hyuki-cvs-graph',
+    requires=['docutils', 'PyYAML'],
     classifiers=classifiers,
     entry_points="""
        [console_scripts]
