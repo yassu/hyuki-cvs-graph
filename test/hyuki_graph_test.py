@@ -4,7 +4,7 @@
 from nose.tools import raises
 from hyuki_graph.hyuki_graph import(
     get_dates, get_str_projname, get_commits_from_text,
-    get_date_from_text
+    get_date_from_text, fill_commits_by_zero
     )
 from datetime import date, timedelta
 import os.path
@@ -92,3 +92,26 @@ def get_str_projname_test2():
     projname = get_str_projname('{sep}usr{sep}bin{sep}dev'.format(
         sep=os.path.sep))
     assert(projname == 'dev')
+
+def fill_commits_by_zero_test1():
+    commits = {
+        'proj1': {
+            date(2016, 1, 1): 3,
+            date(2016, 1, 3): 5},
+         'proj2': {
+            date(2016, 1, 2): 4,
+            date(2016, 1, 4): 6}}
+    assert(fill_commits_by_zero(commits, start_day=date(2016, 1, 4), days=3)
+        == {
+        'proj1': {
+            date(2016, 1, 1): 3,
+            date(2016, 1, 2): 0,
+            date(2016, 1, 3): 5,
+            date(2016, 1, 4): 0},
+         'proj2': {
+            date(2016, 1, 1): 0,
+            date(2016, 1, 2): 4,
+            date(2016, 1, 3): 0,
+            date(2016, 1, 4): 6}
+        }
+    )

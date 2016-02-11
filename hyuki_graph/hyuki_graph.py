@@ -191,6 +191,16 @@ def get_dates(day_num):
 def get_str_projname(project):
     return os.path.abspath(project).split(os.path.sep)[-1]
 
+def fill_commits_by_zero(commits, start_day=datetime.date.today(),
+        days=DEFAULT_NUMBER_OF_DAY):
+        # commitsのstart_dayからdaysまでの間の
+        # 未定義な要素を0としたdictを返す.
+        ret_commits = dict()
+        for proj, date_to_commitnum in commits.items():
+            for j in range(days + 1):
+                _date = start_day - datetime.timedelta(days=j)
+                commits[proj][_date] = commits[proj].get(_date, 0)
+        return commits
 
 def get_parser():
     usage = "Usage: hyuki-graph [option] [base_dir]"
@@ -233,7 +243,8 @@ def main():
     projects = list(get_cvs_dirs(base_path))
     for path in projects:
         commits[path] = get_commit_numbers(path, opts.day_num, opts.author)
-    commits.update(get_commits_from_textfile())
+    commits_from_textfile = fill_commits_by_zero(get_commits_from_textfile())
+    commits.update(commits_from_textfile)
 
     commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
                                   opts.is_dead_or_alive)
