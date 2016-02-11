@@ -4,7 +4,8 @@
 import os
 import sys
 import datetime
-# import pprint
+from copy import deepcopy
+import pprint
 import subprocess
 import re
 from optparse import OptionParser
@@ -59,7 +60,6 @@ def get_commits_from_textfile(use_files=DEFAULT_USE_FILE):
         for fname in use_filenames:
             with open(fname) as f:
                 commits.update(get_commits_from_text(f.read()))
-    print(commits)
     return commits
 
 def get_commits_from_text(text):
@@ -202,6 +202,15 @@ def fill_commits_by_zero(commits, start_day=datetime.date.today(),
                 commits[proj][_date] = commits[proj].get(_date, 0)
         return commits
 
+def update_as_commits(commits1, commits2):
+    commits1 = deepcopy(commits1)
+    for proj, _date_to_status in commits2.items():
+        for _date, _status in _date_to_status.items():
+            if proj not in commits1:
+                commits1[proj] = dict()
+            commits1[proj][_date] = commits1.get(proj, {}).get(_date, 0) + _status
+    return commits1
+
 def get_parser():
     usage = "Usage: hyuki-graph [option] [base_dir]"
     parser = OptionParser(usage=usage, version=__VERSION__)
@@ -242,9 +251,10 @@ def main():
     commits = dict()
     projects = list(get_cvs_dirs(base_path))
     for path in projects:
-        commits[path] = get_commit_numbers(path, opts.day_num, opts.author)
+        commits[get_str_projname(path)] = get_commit_numbers(path, opts.day_num, opts.author)
     commits_from_textfile = fill_commits_by_zero(get_commits_from_textfile())
-    commits.update(commits_from_textfile)
+    commits = update_as_commits(commits, commits_from_textfile)
+    # pprint.pprint(commits)
 
     commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
                                   opts.is_dead_or_alive)

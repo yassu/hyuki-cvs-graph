@@ -4,7 +4,7 @@
 from nose.tools import raises
 from hyuki_graph.hyuki_graph import(
     get_dates, get_str_projname, get_commits_from_text,
-    get_date_from_text, fill_commits_by_zero
+    get_date_from_text, fill_commits_by_zero, update_as_commits
     )
 from datetime import date, timedelta
 import os.path
@@ -115,3 +115,43 @@ def fill_commits_by_zero_test1():
             date(2016, 1, 4): 6}
         }
     )
+def update_as_commits_test():
+    commits1 = {
+        'proj1': {
+            date(2016, 1, 1): 3,
+            date(2016, 1, 3): 5},
+         'proj2': {
+            date(2016, 1, 2): 4,
+            date(2016, 1, 4): 6}}
+    commits2 = {
+        'proj3': {
+            date(2016, 1, 1): 2,
+            date(2016, 1, 3): 3},
+         'proj2': {
+            date(2016, 1, 2): 1,
+            date(2016, 1, 4): 9}}
+    commits = update_as_commits(commits1, commits2)
+    assert(commits == {
+        'proj1': {
+            date(2016, 1, 1): 3,
+            date(2016, 1, 3): 5},
+         'proj2': {
+            date(2016, 1, 2): 5,
+            date(2016, 1, 4): 15},
+        'proj3': {
+            date(2016, 1, 1): 2,
+            date(2016, 1, 3): 3}
+            })
+
+    commits = update_as_commits(commits2, commits1)
+    assert(commits == {
+        'proj1': {
+            date(2016, 1, 1): 3,
+            date(2016, 1, 3): 5},
+         'proj2': {
+            date(2016, 1, 2): 5,
+            date(2016, 1, 4): 15},
+        'proj3': {
+            date(2016, 1, 1): 2,
+            date(2016, 1, 3): 3}
+            })
