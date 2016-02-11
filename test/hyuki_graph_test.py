@@ -21,7 +21,6 @@ def get_date_from_text_test2():
 def get_date_from_text_test3():
     get_date_from_text('year/02/03')
 
-
 @raises(TypeError)
 def get_date_from_text_test4():
     get_date_from_text('2015/month/03')

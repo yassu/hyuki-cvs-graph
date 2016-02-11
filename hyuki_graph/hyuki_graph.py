@@ -10,11 +10,12 @@ import subprocess
 import re
 from optparse import OptionParser
 import json
+import yaml
 from collections import defaultdict
 
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
-DEFAULT_USE_FILE = 'hyuki_graph.json'
+DEFAULT_USE_FILENAME = 'hyuki_graph.yaml'
 
 __VERSION__ = '0.1.0'
 
@@ -50,27 +51,31 @@ def get_date_from_text(text):
     except ValueError:
         raise TypeError('{} is not in range for date.'.format(text))
 
-def get_commits_from_textfile(use_files=DEFAULT_USE_FILE):
-    use_filenames = DEFAULT_USE_FILE.split()
+def get_commits_from_textfile(use_files=DEFAULT_USE_FILENAME):
+    use_filenames = DEFAULT_USE_FILENAME.split()
     commits = dict()
 
-    if not os.path.isfile(DEFAULT_USE_FILE):
+    if not os.path.isfile(DEFAULT_USE_FILENAME):
         return {}
     else:
         for fname in use_filenames:
             with open(fname) as f:
-                commits.update(get_commits_from_text(f.read()))
+                commits.update(get_commits_from_text(f.read(), 'yaml'))
     return commits
 
-def get_commits_from_text(text):
-    jdata = json.loads(text)
+def get_commits_from_text(text, ext):
+    if ext == 'json':
+        load_func = json.loads
+    elif ext == 'yaml':
+        load_func = yaml.load
+    jdata = load_func(text)
     true_data = defaultdict(lambda: defaultdict(int))
     for proj, date_status in jdata.items():
         dates = date_status.keys()
         for date in dates:
             date_d = get_date_from_text(date)
             true_data[proj][date_d] = date_status[date]
-    return true_data
+    return dict(true_data)
 
 
 def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
@@ -254,7 +259,6 @@ def main():
         commits[get_str_projname(path)] = get_commit_numbers(path, opts.day_num, opts.author)
     commits_from_textfile = fill_commits_by_zero(get_commits_from_textfile())
     commits = update_as_commits(commits, commits_from_textfile)
-    # pprint.pprint(commits)
 
     commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
                                   opts.is_dead_or_alive)
