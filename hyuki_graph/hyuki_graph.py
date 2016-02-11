@@ -4,6 +4,7 @@
 import os
 import sys
 import datetime
+from copy import deepcopy
 # import pprint
 import subprocess
 import re
@@ -201,6 +202,15 @@ def fill_commits_by_zero(commits, start_day=datetime.date.today(),
                 _date = start_day - datetime.timedelta(days=j)
                 commits[proj][_date] = commits[proj].get(_date, 0)
         return commits
+
+def update_as_commits(commits1, commits2):
+    commits1 = deepcopy(commits1)
+    for proj, _date_to_status in commits2.items():
+        for _date, _status in _date_to_status.items():
+            if proj not in commits1:
+                commits1[proj] = dict()
+            commits1[proj][_date] = commits1.get(proj, {}).get(_date, 0) + _status
+    return commits1
 
 def get_parser():
     usage = "Usage: hyuki-graph [option] [base_dir]"
