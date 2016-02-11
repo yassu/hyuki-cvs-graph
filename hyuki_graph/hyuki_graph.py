@@ -78,10 +78,10 @@ def get_commits_from_textfile(use_files=DEFAULT_USE_FILENAME):
     print(use_filenames)
     commits = dict()
 
-    if not os.path.isfile(DEFAULT_USE_FILENAME):
-        return {}
-
     for fname in use_filenames:
+        if not os.path.isfile(fname):
+            return {}
+
         with open(fname) as f:
             ext = (os.path.splitext(fname)[-1])[1:]
             commits.update(get_commits_from_text(f.read(), ext))
