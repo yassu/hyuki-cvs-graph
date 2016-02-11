@@ -3,18 +3,6 @@ Hyuki-CVS-Graph
 .. image:: https://travis-ci.org/yassu/hyuki-cvs-graph.svg?branch=master
     :target: https://travis-ci.org/yassu/hyuki-cvs-graph
 
-This is a tool like as  `taking-star-table with color <https://note.mu/hyuki/n/n9a6e7c1e0d7b>`__ (ja),
-which considered by Mr. Hyuki.
-
-This tool makes table which is written project-name, day number from today and commit-status.
-
-Furtheremore, if cross point which project-name and day number is written D by red color,
-this means that the project does not committed.
-
-If it is written M by yellow color, this means that the project is committed some times less than 10.
-
-If it is written L by green color, this means that the project is committed some times more than or equal to 10.
-
 Usage
 =====
 
@@ -26,6 +14,65 @@ where, ``base_dir``\ is a the most top directory which is watched by this progra
 
 Note that default ``base_dir``\ is ``.``\ .
 
+
+This is a tool like as  `taking-star-table with color <https://note.mu/hyuki/n/n9a6e7c1e0d7b>`__ (ja),
+which considered by Mr. Hyuki.
+
+This tool makes table which is written project-name, day number from today and commit-status.
+
+Also, if there is ``hyuki_graph.json`` or ``hyuki_graph.yaml`` file in directory, which this program watch, this program make
+a table by using commits number which got by CVS and content of the file.
+
+Furtheremore, if cross point which project-name and day number is written D by red color,
+this means that the project does not committed.
+
+If it is written M by yellow color, this means that the project is committed some times less than 10.
+
+If it is written L by green color, this means that the project is committed some times more than or equal to 10.
+
+
+Syntax of Input File
+======================
+
+This program receives following syntax files.
+
+As json syntax:
+
+``` json
+
+{
+  project name: {
+    date: commit number,
+    date: commit number,
+    e.t.c.
+  },
+  project name: {
+    date: commit number,
+    date: commit number,
+    e.t.c.
+  }
+  e.t.c.
+}
+
+```
+
+where, date is a string which has form like "2000/01/01".
+
+As yaml syntax, like json syntax:
+
+``` yaml
+
+project name:
+  date: commit number
+  date: commit number
+  e.t.c.
+project name:
+  date: commit number
+  date: commit number
+  e.t.c.
+
+```
+
 Options
 =========
 
@@ -35,6 +82,12 @@ Options
    Default value is 10.
 -  ``--DA``, ``--dead_or_alive``: Showing D and A instead of showing D, M and L.
    If there is no commit, D is printted. And there is it, A is printted.
+- ``-f``, ``--file``: indicate input files by separating by space.
+Default of this value is "hyuki_graph.json hyuki_graph.yaml.
+- ``--FO, --file-only``: watch only input file not not watching CVS
+
+However this is not a option, we don't not watched input file by ``--file=""``.
+
 
 How to install
 ================

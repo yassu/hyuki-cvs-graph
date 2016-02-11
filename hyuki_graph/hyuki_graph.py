@@ -17,7 +17,7 @@ __VERSION__ = '0.1.0'
 
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
-DEFAULT_USE_FILENAME = 'hyuki_graph.yaml hyuki_graph.json'
+DEFAULT_USE_FILENAME = ' hyuki_graph.json hyuki_graph.yaml'
 
 DEAD = '\033[91m' + "D" + '\033[0m'     # dead commit
 MEDIUM = '\033[93m' + "M" + '\033[0m'   # medium commit
