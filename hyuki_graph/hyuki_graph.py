@@ -8,9 +8,12 @@ import datetime
 import subprocess
 import re
 from optparse import OptionParser
+import json
+from collections import defaultdict
 
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
+DEFAULT_USE_FILE = 'hyuki_graph.json'
 
 __VERSION__ = '0.1.0'
 
@@ -31,6 +34,43 @@ def get_execuable_cvss():
     return execuable_cvss
 
 CVSS = get_execuable_cvss()
+
+def get_date_from_text(text):
+    if (len(text.split(os.path.sep)) != 3):
+        raise TypeError('{} is illegal as a date.'.format(text))
+
+    year, month, day = text.split(os.path.sep)
+    if (not year.isdigit() or
+            not month.isdigit() or
+            not day.isdigit()):
+        raise TypeError('{} is illegal as a date.'.format(text))
+    try:
+        return datetime.date(int(year), int(month), int(day))
+    except ValueError:
+        raise TypeError('{} is not in range for date.'.format(text))
+
+def get_commits_from_textfile(use_files=DEFAULT_USE_FILE):
+    use_filenames = DEFAULT_USE_FILE.split()
+    commits = dict()
+
+    if not os.path.isfile(DEFAULT_USE_FILE):
+        return {}
+    else:
+        for fname in use_filenames:
+            with open(fname) as f:
+                commits.update(get_commits_from_text(f.read()))
+    print(commits)
+    return commits
+
+def get_commits_from_text(text):
+    jdata = json.loads(text)
+    true_data = defaultdict(lambda: defaultdict(int))
+    for proj, date_status in jdata.items():
+        dates = date_status.keys()
+        for date in dates:
+            date_d = get_date_from_text(date)
+            true_data[proj][date_d] = date_status[date]
+    return true_data
 
 
 def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
@@ -97,6 +137,7 @@ def get_revision_cvs(path):
 
 
 def get_commit_numbers(path, day_num, author):
+    first_chdir = os.getcwd()
     os.chdir(path)
 
     cvs = get_revision_cvs(path)
@@ -122,6 +163,7 @@ def get_commit_numbers(path, day_num, author):
         if author is not None:
             pat += r" \b(" + "|".join(author.split()) + r")\b"
         numbers[datetime.date(year, month, day)] = len(re.findall(pat, log))
+    os.chdir(first_chdir)
     return numbers
 
 
@@ -149,6 +191,16 @@ def get_dates(day_num):
 def get_str_projname(project):
     return os.path.abspath(project).split(os.path.sep)[-1]
 
+def fill_commits_by_zero(commits, start_day=datetime.date.today(),
+        days=DEFAULT_NUMBER_OF_DAY):
+        # commitsのstart_dayからdaysまでの間の
+        # 未定義な要素を0としたdictを返す.
+        ret_commits = dict()
+        for proj, date_to_commitnum in commits.items():
+            for j in range(days + 1):
+                _date = start_day - datetime.timedelta(days=j)
+                commits[proj][_date] = commits[proj].get(_date, 0)
+        return commits
 
 def get_parser():
     usage = "Usage: hyuki-graph [option] [base_dir]"
@@ -191,6 +243,8 @@ def main():
     projects = list(get_cvs_dirs(base_path))
     for path in projects:
         commits[path] = get_commit_numbers(path, opts.day_num, opts.author)
+    commits_from_textfile = fill_commits_by_zero(get_commits_from_textfile())
+    commits.update(commits_from_textfile)
 
     commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
                                   opts.is_dead_or_alive)
