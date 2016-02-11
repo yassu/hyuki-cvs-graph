@@ -38,40 +38,36 @@ This program receives following syntax files.
 
 As json syntax:
 
-``` json
+.. code:: json
 
-{
-  project name: {
-    date: commit number,
-    date: commit number,
-    e.t.c.
-  },
-  project name: {
-    date: commit number,
-    date: commit number,
+  {
+    project name: {
+      date: commit number,
+      date: commit number,
+      e.t.c.
+    },
+    project name: {
+      date: commit number,
+      date: commit number,
+      e.t.c.
+    }
     e.t.c.
   }
-  e.t.c.
-}
-
-```
 
 where, date is a string which has form like "2000/01/01".
 
 As yaml syntax, like json syntax:
 
-``` yaml
+.. code:: json
 
-project name:
-  date: commit number
-  date: commit number
-  e.t.c.
-project name:
-  date: commit number
-  date: commit number
-  e.t.c.
-
-```
+  project name:
+    date: commit number
+    date: commit number
+    e.t.c.
+  project name:
+    date: commit number
+    date: commit number
+    e.t.c.
 
 Options
 =========
@@ -80,10 +76,8 @@ Options
 -  ``-a``, ``--author``: indicate name of committer.
 -  ``-m``, ``--medium-sep``: If more than or equal to number of commit is committed, printted L.
    Default value is 10.
--  ``--DA``, ``--dead_or_alive``: Showing D and A instead of showing D, M and L.
-   If there is no commit, D is printted. And there is it, A is printted.
-- ``-f``, ``--file``: indicate input files by separating by space.
-Default of this value is "hyuki_graph.json hyuki_graph.yaml.
+-  ``--DA``, ``--dead_or_alive``: Showing D and A instead of showing D, M and L.  If there is no commit, D is printted. And there is it, A is printted.
+- ``-f``, ``--file``: indicate input files by separating by space.  Default of this value is "hyuki_graph.json hyuki_graph.yaml.
 - ``--FO, --file-only``: watch only input file not not watching CVS
 
 However this is not a option, we don't not watched input file by ``--file=""``.
