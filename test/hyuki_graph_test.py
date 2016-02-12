@@ -6,7 +6,7 @@ from hyuki_graph.hyuki_graph import(
     DEFAULT_MEDIUM_SEP,
     DEAD, ALIVE, MEDIUM, LARGE,
     get_dead_or_alive_number, get_dead_medium_or_large,
-    is_correct_as_inputfile_data,
+    is_correct_as_date, is_correct_as_inputfile_data,
     get_dates, get_str_projname, get_commits_from_text,
     get_ext,
     get_date_from_text, fill_commits_by_zero, update_as_commits
@@ -41,6 +41,21 @@ def get_dead_or_alive_number_test1():
 
 def get_dead_or_alive_number_test2():
     assert(get_dead_or_alive_number(10) == ALIVE)
+
+
+def is_correct_as_date_test1():
+    assert(is_correct_as_date("2015/03/21") is True)
+
+
+def is_correct_as_date_test2():
+    assert(is_correct_as_date("2015-03-21") is True)
+
+
+def is_correct_as_date_test3():
+    assert(is_correct_as_date("2015/03-21") is False)
+
+def is_correct_as_date_test4():
+    assert(is_correct_as_date("2015/03/99") is False)
 
 
 def is_correct_as_inputfile_data_test1():

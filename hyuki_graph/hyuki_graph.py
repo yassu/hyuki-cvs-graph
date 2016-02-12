@@ -59,6 +59,30 @@ def get_dead_or_alive_number(n, medium_sep=DEFAULT_MEDIUM_SEP):
     else:
         return ALIVE
 
+def is_correct_as_date(_date):
+    if '/' in _date:
+        sep = '/'
+    elif '-' in _date:
+        sep = '-'
+    else:
+        return False
+
+    if len(_date.split(sep)) != 3:
+        return False
+
+    year, month, day = _date.split(sep)
+    if not year.isdigit() or not month.isdigit() or not day.isdigit():
+        return False
+
+    year  = int(year)
+    month = int(month)
+    day   = int(day)
+
+    try:
+        datetime.date(year, month, day)
+    except ValueError:
+        return False
+    return True
 
 def is_correct_as_inputfile_data(data):
     if isinstance(data, dict) is False:
@@ -157,7 +181,7 @@ def get_commits_from_text(text, ext):
         raise ValueError("Illegal data format")
 
     if not is_correct_as_inputfile_data(commits):
-        raise TypeError('WARNING: illegal data structure in input file')
+        raise TypeError('illegal data structure in input file')
 
     true_data = defaultdict(lambda: defaultdict(int))
     for proj, date_status in commits.items():
