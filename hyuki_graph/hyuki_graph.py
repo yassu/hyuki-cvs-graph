@@ -74,6 +74,16 @@ def get_date_from_text(text):
     except ValueError:
         raise TypeError('{} is not in range for date.'.format(text))
 
+def get_ext(path, default_ext=None):
+    if default_ext is not None:
+        return default_ext
+
+    ext = os.path.splitext(path)[-1]
+    if len(ext) >= 1:
+        return ext[1:]
+    else:
+        return None
+
 
 def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME):
     use_filenames = use_files.split()
