@@ -97,8 +97,12 @@ def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME):
             continue
 
         with open(fname) as f:
-            ext = (os.path.splitext(fname)[-1])[1:]
-            commits.update(get_commits_from_text(f.read(), ext))
+            ext = get_ext(fname)
+            if ext in ('json', 'yaml'):
+                commits.update(get_commits_from_text(f.read(), ext))
+            else:
+                sys.stderr.write('{} is a illegal file as input file.\n'.
+                    format(fname))
     return commits
 
 
