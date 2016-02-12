@@ -60,6 +60,25 @@ def get_dead_or_alive_number(n, medium_sep=DEFAULT_MEDIUM_SEP):
         return ALIVE
 
 
+def is_correct_as_inputfile_data(data):
+    if isinstance(data, dict) is False:
+        return False
+
+    for proj, commits_to_status in data.items():
+        if isinstance(proj, str) is False:
+            return False
+        if isinstance(commits_to_status, dict) is False:
+            return False
+        print(commits_to_status)
+        for _date, num in commits_to_status.items():
+            if isinstance(_date, str) is False:
+                return False    # TODO: もっといい感じの条件に
+            if isinstance(num, int) is False:
+                return False
+
+    return True
+
+
 def get_date_from_text(text):
     if '/' in text:
         sep = '/'
@@ -124,7 +143,6 @@ def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME,
                     format(fname))
     return commits
 
-
 def get_commits_from_text(text, ext):
     if ext == 'json':
         load_func = json.loads
@@ -134,12 +152,15 @@ def get_commits_from_text(text, ext):
         raise TypeError('extension {} is not supported.'.format(ext))
 
     try:
-        jdata = load_func(text)
+        commits = load_func(text)
     except ValueError:
         raise ValueError("Illegal data format")
 
+    if not is_correct_as_inputfile_data(commits):
+        raise TypeError('WARNING: illegal data structure in input file')
+
     true_data = defaultdict(lambda: defaultdict(int))
-    for proj, date_status in jdata.items():
+    for proj, date_status in commits.items():
         dates = date_status.keys()
         for date in dates:
             date_d = get_date_from_text(date)
