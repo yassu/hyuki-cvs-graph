@@ -393,12 +393,14 @@ def get_parser():
     parser.add_option(
         '-t', '--file-type',
         action='store',
+        help="indicate type of input file (json or yaml)"
         dest='file_type',
     )
     parser.add_option(
         '-r', '--only-running',
         action='store_true',
         default=False,
+        help="show only running projects",
         dest='only_running',
     )
     return parser
