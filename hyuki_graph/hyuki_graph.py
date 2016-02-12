@@ -139,7 +139,8 @@ def get_commits_from_text(text, ext):
     return dict(true_data)
 
 
-def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
+def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
+            only_running=False):
     dates = list(get_dates(day_num))
     projects = set()
 
@@ -154,6 +155,12 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive):
         for date, commit_num in commits.items():
             logs[(project, date)] = status_func(commit_num, medium_sep)
             projects.add(project)
+
+        if only_running and \
+                set([logs[(project, date)] for date in dates]) == set([DEAD]):
+            projects.remove(project)
+            for date in dates:
+                del(logs[project, date])
 
     if projects == set():
         sys.stderr.write("WARNING: There doesn't exist repository which "
@@ -322,6 +329,12 @@ def get_parser():
         action='store',
         dest='file_type',
     )
+    parser.add_option(
+        '-r', '--only-running',
+        action='store_true',
+        default=False,
+        dest='only_running',
+    )
     return parser
 
 
@@ -348,7 +361,8 @@ def main():
     # pprint.pprint(commits)
 
     commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
-                                  opts.is_dead_or_alive)
+                                  opts.is_dead_or_alive,
+                                  only_running=opts.only_running)
     print(commits_log)
 
 

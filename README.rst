@@ -84,6 +84,7 @@ Options
 - ``-f``, ``--file``: indicate input files by separating by space.  Default of this value is "hyuki_graph.json hyuki_graph.yaml.
 - ``--FO, --file-only``: watch only input file not watching CVS
 - ``--t``, ``--file-type``: indicate format of input files. Please indicate json or yaml.
+- ``-r``, ``--only-running``: show only activate project
 
 However this is not a option, we don't not watched input file by ``--file=""``.
 
