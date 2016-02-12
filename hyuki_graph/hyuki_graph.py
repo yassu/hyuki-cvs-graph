@@ -15,6 +15,8 @@ from collections import defaultdict
 
 __VERSION__ = '0.2.6'
 
+PYTHON_VERSION = sys.version_info[0]    # major version
+
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
 DEFAULT_USE_FILENAME = ' hyuki_graph.json hyuki_graph.yaml'
@@ -60,6 +62,10 @@ def get_dead_or_alive_number(n, medium_sep=DEFAULT_MEDIUM_SEP):
         return ALIVE
 
 def is_correct_as_date(_date):
+    _date = get_str(_date)
+    if isinstance(_date, str) is False:
+        return False
+
     if '/' in _date:
         sep = '/'
     elif '-' in _date:
@@ -84,19 +90,26 @@ def is_correct_as_date(_date):
         return False
     return True
 
+def get_str(s):
+    # if s is object of unicode, return str(s)
+    # else: return s
+    if PYTHON_VERSION == 2 and isinstance(s, unicode):
+        return str(s)
+    else:
+        return s
+
 def is_correct_as_inputfile_data(data):
     if isinstance(data, dict) is False:
         return False
 
     for proj, commits_to_status in data.items():
-        if isinstance(proj, str) is False:
+        if isinstance(get_str(proj), str) is False:
             return False
         if isinstance(commits_to_status, dict) is False:
             return False
-        print(commits_to_status)
         for _date, num in commits_to_status.items():
-            if isinstance(_date, str) is False:
-                return False    # TODO: もっといい感じの条件に
+            if is_correct_as_date(_date) is False:
+                return False
             if isinstance(num, int) is False:
                 return False
 
@@ -410,8 +423,8 @@ def main():
         commits_from_textfile = fill_commits_by_zero(
             get_commits_from_textfile(base_path, use_files=opts.filenames,
                 file_type=opts.file_type))
-    except ValueError:
-        print('ValueError')
+    except ValueError as ex:
+        sys.stderr.write(ex.message)
 
     commits = update_as_commits(commits, commits_from_textfile)
     # pprint.pprint(commits)

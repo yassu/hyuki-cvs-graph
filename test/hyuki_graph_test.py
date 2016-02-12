@@ -43,6 +43,9 @@ def get_dead_or_alive_number_test2():
     assert(get_dead_or_alive_number(10) == ALIVE)
 
 
+def is_correct_as_date_test0():
+    assert(is_correct_as_date(set()) is False)
+
 def is_correct_as_date_test1():
     assert(is_correct_as_date("2015/03/21") is True)
 
