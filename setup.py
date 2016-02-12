@@ -1,6 +1,6 @@
 from setuptools import setup
 
-__VERSION__ = '0.2.0'
+__VERSION__ = '0.2.2'
 
 classifiers = [
     'Development Status :: 3 - Alpha',
