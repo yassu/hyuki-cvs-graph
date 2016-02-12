@@ -83,6 +83,7 @@ Options
 -  ``--DA``, ``--dead_or_alive``: Showing D and A instead of showing D, M and L.  If there is no commit, D is printted. And there is it, A is printted.
 - ``-f``, ``--file``: indicate input files by separating by space.  Default of this value is "hyuki_graph.json hyuki_graph.yaml.
 - ``--FO, --file-only``: watch only input file not not watching CVS
+- ``--t``, ``--file-type``: indicate format of input files. Please indicate json or yaml.
 
 However this is not a option, we don't not watched input file by ``--file=""``.
 
