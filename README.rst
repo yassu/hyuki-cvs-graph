@@ -1,7 +1,5 @@
 Hyuki-CVS-Graph
 ===============
-.. image:: https://travis-ci.org/yassu/hyuki-cvs-graph.svg?branch=master
-    :target: https://travis-ci.org/yassu/hyuki-cvs-graph
 
 Usage
 =====
@@ -38,7 +36,7 @@ This program receives following syntax files.
 
 As json syntax:
 
-.. code:: json
+.. code::
 
   {
     project name: {
@@ -58,7 +56,7 @@ where, date is a string which has form like "2000/01/01".
 
 As yaml syntax, like json syntax:
 
-.. code:: json
+.. code::
 
   project name:
     date: commit number
