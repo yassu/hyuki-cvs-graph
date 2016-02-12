@@ -85,7 +85,8 @@ def get_ext(path, default_ext=None):
         return None
 
 
-def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME):
+def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME,
+            file_type=None):
     use_filenames = use_files.split()
     for i in range(len(use_filenames)):
         use_filenames[i] = os.path.join(base_path, use_filenames[i])
@@ -98,7 +99,12 @@ def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME):
 
         with open(fname) as f:
             ext = get_ext(fname)
-            if ext in ('json', 'yaml'):
+            use_exts = ('json', 'yaml')
+            if file_type:
+                ext = file_type
+                use_exts = (file_type, )
+
+            if set(use_exts).issubset(set(['json', 'yaml'])):
                 commits.update(get_commits_from_text(f.read(), ext))
             else:
                 sys.stderr.write('{} is a illegal file as input file.\n'.
@@ -299,6 +305,11 @@ def get_parser():
         dest='is_file_only',
         help='this program not watch cvs directories.'
     )
+    parser.add_option(
+        '-t', '--file-type',
+        action='store',
+        dest='file_type',
+    )
     return parser
 
 
@@ -318,7 +329,8 @@ def main():
                 path, opts.day_num, opts.author)
 
     commits_from_textfile = fill_commits_by_zero(
-        get_commits_from_textfile(base_path, opts.filenames))
+        get_commits_from_textfile(base_path, use_files=opts.filenames,
+            file_type=opts.file_type))
 
     commits = update_as_commits(commits, commits_from_textfile)
     # pprint.pprint(commits)
