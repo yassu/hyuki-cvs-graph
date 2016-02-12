@@ -393,7 +393,7 @@ def get_parser():
     parser.add_option(
         '-t', '--file-type',
         action='store',
-        help="indicate type of input file (json or yaml)"
+        help="indicate type of input file (json or yaml)",
         dest='file_type',
     )
     parser.add_option(
