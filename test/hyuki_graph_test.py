@@ -46,18 +46,6 @@ def get_date_from_text_test1():
     assert(get_date_from_text('2015/03/21') ==
            date(2015, 3, 21))
 
-def get_ext_test1():
-    assert(get_ext('json.json') == 'json')
-
-def get_ext_test2():
-    assert(get_ext('test.yaml') == 'yaml')
-
-def get_ext_test3():
-    assert(get_ext('test.yaml', 'json') == 'json')
-
-def get_ext_test4():
-    assert(get_ext('~/dev/') is None)
-
 
 @raises(TypeError)
 def get_date_from_text_test2():
@@ -82,6 +70,28 @@ def get_date_from_text_test5():
 @raises(TypeError)
 def get_date_from_text_test6():
     get_date_from_text('2015/02/99')
+
+
+def get_date_from_text_test7():
+    assert(get_date_from_text('2015-03-21') ==
+           date(2015, 3, 21))
+
+
+@raises(TypeError)
+def get_date_from_text_test8():
+    get_date_from_text('2015/03-21')
+
+def get_ext_test1():
+    assert(get_ext('json.json') == 'json')
+
+def get_ext_test2():
+    assert(get_ext('test.yaml') == 'yaml')
+
+def get_ext_test3():
+    assert(get_ext('test.yaml', 'json') == 'json')
+
+def get_ext_test4():
+    assert(get_ext('~/dev/') is None)
 
 
 def get_commits_from_text_test0():

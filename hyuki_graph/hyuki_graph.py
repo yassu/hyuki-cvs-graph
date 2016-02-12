@@ -61,10 +61,17 @@ def get_dead_or_alive_number(n, medium_sep=DEFAULT_MEDIUM_SEP):
 
 
 def get_date_from_text(text):
-    if (len(text.split(os.path.sep)) != 3):
+    if '/' in text:
+        sep = '/'
+    elif '-' in text:
+        sep = '-'
+    else:
         raise TypeError('{} is illegal as a date.'.format(text))
 
-    year, month, day = text.split(os.path.sep)
+    if (len(text.split(sep)) != 3):
+        raise TypeError('{} is illegal as a date.'.format(text))
+
+    year, month, day = text.split(sep)
     if (not year.isdigit() or
             not month.isdigit() or
             not day.isdigit()):
