@@ -24,6 +24,7 @@ MEDIUM = '\033[93m' + "M" + '\033[0m'   # medium commit
 LARGE = '\033[92m' + "L" + '\033[0m'    # Large commit
 ALIVE = '\033[92m' + "A" + '\033[0m'    # Alive commit
 
+
 def get_execuable_cvss():
     execuable_cvss = []
     try:
@@ -51,12 +52,12 @@ def get_dead_medium_or_large(n, medium_sep=DEFAULT_MEDIUM_SEP):
     else:
         return LARGE
 
+
 def get_dead_or_alive_number(n, medium_sep=DEFAULT_MEDIUM_SEP):
     if n == 0:
         return DEAD
     else:
         return ALIVE
-
 
 
 def get_date_from_text(text):
@@ -73,6 +74,7 @@ def get_date_from_text(text):
     except ValueError:
         raise TypeError('{} is not in range for date.'.format(text))
 
+
 def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME):
     use_filenames = use_files.split()
     for i in range(len(use_filenames)):
@@ -88,6 +90,7 @@ def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME):
             ext = (os.path.splitext(fname)[-1])[1:]
             commits.update(get_commits_from_text(f.read(), ext))
     return commits
+
 
 def get_commits_from_text(text, ext):
     if ext == 'json':
@@ -216,16 +219,18 @@ def get_dates(day_num):
 def get_str_projname(project):
     return os.path.abspath(project).split(os.path.sep)[-1]
 
+
 def fill_commits_by_zero(commits, start_day=datetime.date.today(),
-        days=DEFAULT_NUMBER_OF_DAY):
+                         days=DEFAULT_NUMBER_OF_DAY):
         # commitsのstart_dayからdaysまでの間の
         # 未定義な要素を0としたdictを返す.
-        ret_commits = dict()
-        for proj, date_to_commitnum in commits.items():
-            for j in range(days + 1):
-                _date = start_day - datetime.timedelta(days=j)
-                commits[proj][_date] = commits[proj].get(_date, 0)
-        return commits
+    commits = deepcopy(commits)
+    for proj, date_to_commitnum in commits.items():
+        for j in range(days + 1):
+            _date = start_day - datetime.timedelta(days=j)
+            commits[proj][_date] = commits[proj].get(_date, 0)
+    return commits
+
 
 def update_as_commits(commits1, commits2):
     commits1 = deepcopy(commits1)
@@ -233,8 +238,10 @@ def update_as_commits(commits1, commits2):
         for _date, _status in _date_to_status.items():
             if proj not in commits1:
                 commits1[proj] = dict()
-            commits1[proj][_date] = commits1.get(proj, {}).get(_date, 0) + _status
+            commits1[proj][_date] = commits1.get(
+                proj, {}).get(_date, 0) + _status
     return commits1
+
 
 def get_parser():
     usage = "Usage: hyuki-graph [option] [base_dir]"

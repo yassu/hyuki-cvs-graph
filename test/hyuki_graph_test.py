@@ -8,38 +8,48 @@ from hyuki_graph.hyuki_graph import(
     get_dead_or_alive_number, get_dead_medium_or_large,
     get_dates, get_str_projname, get_commits_from_text,
     get_date_from_text, fill_commits_by_zero, update_as_commits
-    )
+)
 from datetime import date, timedelta
 import os.path
+
 
 def get_dead_medium_or_large_test0():
     assert(get_dead_medium_or_large(0) == DEAD)
 
+
 def get_dead_medium_or_large_test2():
     assert(get_dead_medium_or_large(1) == MEDIUM)
 
-def get_dead_medium_or_large_test2():
+
+def get_dead_medium_or_large_test3():
     assert(get_dead_medium_or_large(DEFAULT_MEDIUM_SEP - 1) == MEDIUM)
+
 
 def get_dead_medium_or_large_test1():
     assert(get_dead_medium_or_large(DEFAULT_MEDIUM_SEP) == LARGE)
 
+
 def get_dead_or_alive_number_test0():
     assert(get_dead_or_alive_number(0) == DEAD)
+
 
 def get_dead_or_alive_number_test1():
     assert(get_dead_or_alive_number(1) == ALIVE)
 
+
 def get_dead_or_alive_number_test2():
     assert(get_dead_or_alive_number(10) == ALIVE)
 
+
 def get_date_from_text_test1():
     assert(get_date_from_text('2015/03/21') ==
-            date(2015, 3, 21))
+           date(2015, 3, 21))
+
 
 @raises(TypeError)
 def get_date_from_text_test2():
     get_date_from_text('bear')
+
 
 @raises(TypeError)
 def get_date_from_text_test3():
@@ -50,46 +60,53 @@ def get_date_from_text_test3():
 def get_date_from_text_test4():
     get_date_from_text('2015/month/03')
 
+
 @raises(TypeError)
 def get_date_from_text_test5():
     get_date_from_text('2015/02/day')
+
 
 @raises(TypeError)
 def get_date_from_text_test6():
     get_date_from_text('2015/02/99')
 
+
 def get_commits_from_text_test0():
     text = '{}'
     assert(get_commits_from_text(text, 'json') == {})
 
+
 def get_commits_from_text_test1():
     text = '{"proj1": {"2016/01/01": 3}}'
     assert(get_commits_from_text(text, 'json') ==
-        {'proj1':
+           {'proj1':
             {date(2016, 1, 1): 3}}
-        )
+           )
+
 
 def get_commits_from_text_test2():
     text = ('{"proj1": {"2016/01/01": 3,'
-                      '"2016/01/03": 5}}')
+            '"2016/01/03": 5}}')
     assert(get_commits_from_text(text, 'json') ==
-        {'proj1': {
+           {'proj1': {
             date(2016, 1, 1): 3,
             date(2016, 1, 3): 5}})
 
+
 def get_commits_from_text_test3():
     text = ('{"proj1": {"2016/01/01": 3,'
-                      '"2016/01/03": 5},'
+            '"2016/01/03": 5},'
             ' "proj2": {"2016/01/02": 4,'
-                       '"2016/01/04": 6}}'
+            '"2016/01/04": 6}}'
             )
     assert(get_commits_from_text(text, 'json') ==
-        {'proj1': {
+           {'proj1': {
             date(2016, 1, 1): 3,
             date(2016, 1, 3): 5},
-         'proj2': {
+            'proj2': {
             date(2016, 1, 2): 4,
             date(2016, 1, 4): 6}})
+
 
 def get_dates_test1():
     assert(
@@ -117,41 +134,44 @@ def get_str_projname_test2():
         sep=os.path.sep))
     assert(projname == 'dev')
 
+
 def fill_commits_by_zero_test1():
     commits = {
         'proj1': {
             date(2016, 1, 1): 3,
             date(2016, 1, 3): 5},
-         'proj2': {
+        'proj2': {
             date(2016, 1, 2): 4,
             date(2016, 1, 4): 6}}
-    assert(fill_commits_by_zero(commits, start_day=date(2016, 1, 4), days=3)
-        == {
-        'proj1': {
-            date(2016, 1, 1): 3,
-            date(2016, 1, 2): 0,
-            date(2016, 1, 3): 5,
-            date(2016, 1, 4): 0},
-         'proj2': {
-            date(2016, 1, 1): 0,
-            date(2016, 1, 2): 4,
-            date(2016, 1, 3): 0,
-            date(2016, 1, 4): 6}
+    assert(
+        fill_commits_by_zero(commits, start_day=date(2016, 1, 4), days=3) == {
+            'proj1': {
+                date(2016, 1, 1): 3,
+                date(2016, 1, 2): 0,
+                date(2016, 1, 3): 5,
+                date(2016, 1, 4): 0},
+            'proj2': {
+                date(2016, 1, 1): 0,
+                date(2016, 1, 2): 4,
+                date(2016, 1, 3): 0,
+                date(2016, 1, 4): 6}
         }
     )
+
+
 def update_as_commits_test():
     commits1 = {
         'proj1': {
             date(2016, 1, 1): 3,
             date(2016, 1, 3): 5},
-         'proj2': {
+        'proj2': {
             date(2016, 1, 2): 4,
             date(2016, 1, 4): 6}}
     commits2 = {
         'proj3': {
             date(2016, 1, 1): 2,
             date(2016, 1, 3): 3},
-         'proj2': {
+        'proj2': {
             date(2016, 1, 2): 1,
             date(2016, 1, 4): 9}}
     commits = update_as_commits(commits1, commits2)
@@ -159,23 +179,23 @@ def update_as_commits_test():
         'proj1': {
             date(2016, 1, 1): 3,
             date(2016, 1, 3): 5},
-         'proj2': {
+        'proj2': {
             date(2016, 1, 2): 5,
             date(2016, 1, 4): 15},
         'proj3': {
             date(2016, 1, 1): 2,
             date(2016, 1, 3): 3}
-            })
+    })
 
     commits = update_as_commits(commits2, commits1)
     assert(commits == {
         'proj1': {
             date(2016, 1, 1): 3,
             date(2016, 1, 3): 5},
-         'proj2': {
+        'proj2': {
             date(2016, 1, 2): 5,
             date(2016, 1, 4): 15},
         'proj3': {
             date(2016, 1, 1): 2,
             date(2016, 1, 3): 3}
-            })
+    })

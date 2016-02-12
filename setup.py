@@ -31,4 +31,3 @@ setup(
        hyuki-graph = hyuki_graph.hyuki_graph:main
     """,
 )
-
