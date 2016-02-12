@@ -105,7 +105,10 @@ def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME,
                 use_exts = (file_type, )
 
             if set(use_exts).issubset(set(['json', 'yaml'])):
-                commits.update(get_commits_from_text(f.read(), ext))
+                try:
+                    commits.update(get_commits_from_text(f.read(), ext))
+                except TypeError as ex:
+                    sys.stderr.write("WARNING: {}\n".format(ex.message))
             else:
                 sys.stderr.write('{} is a illegal file as input file.\n'.
                     format(fname))
@@ -117,6 +120,8 @@ def get_commits_from_text(text, ext):
         load_func = json.loads
     elif ext == 'yaml':
         load_func = yaml.load
+    else:
+        raise TypeError('extension {} is not supported.'.format(ext))
     jdata = load_func(text)
     true_data = defaultdict(lambda: defaultdict(int))
     for proj, date_status in jdata.items():

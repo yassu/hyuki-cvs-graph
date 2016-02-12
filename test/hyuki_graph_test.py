@@ -120,6 +120,15 @@ def get_commits_from_text_test3():
             date(2016, 1, 2): 4,
             date(2016, 1, 4): 6}})
 
+@raises(TypeError)
+def get_commits_from_text_test4():
+    text = ('{"proj1": {"2016/01/01": 3,'
+            '"2016/01/03": 5},'
+            ' "proj2": {"2016/01/02": 4,'
+            '"2016/01/04": 6}}'
+            )
+    get_commits_from_text(text, 'sjon')
+
 
 def get_dates_test1():
     assert(
