@@ -1,6 +1,6 @@
 from setuptools import setup
 
-__VERSION__ = '0.2.0'
+__VERSION__ = '0.2.1'
 
 classifiers = [
     'Development Status :: 3 - Alpha',
@@ -24,7 +24,7 @@ setup(
     author='Yassu',
     author_email='mathyassu@gmail.com',
     url='https://github.com/yassu/hyuki-cvs-graph',
-    requires=['docutils', 'PyYAML'],
+    install_requires=['docutils', 'PyYAML'],
     classifiers=classifiers,
     entry_points="""
        [console_scripts]
