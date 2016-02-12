@@ -116,6 +116,9 @@ def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME,
                     commits.update(get_commits_from_text(f.read(), ext))
                 except TypeError as ex:
                     sys.stderr.write("WARNING: {}\n".format(ex.message))
+                except ValueError:
+                    sys.stderr.write("WARNING: {} has illegal format as {}.\n".
+                        format(fname, ext))
             else:
                 sys.stderr.write('{} is a illegal file as input file.\n'.
                     format(fname))
@@ -129,7 +132,12 @@ def get_commits_from_text(text, ext):
         load_func = yaml.load
     else:
         raise TypeError('extension {} is not supported.'.format(ext))
-    jdata = load_func(text)
+
+    try:
+        jdata = load_func(text)
+    except ValueError:
+        raise ValueError("Illegal data format")
+
     true_data = defaultdict(lambda: defaultdict(int))
     for proj, date_status in jdata.items():
         dates = date_status.keys()
@@ -353,9 +361,12 @@ def main():
             commits[get_str_projname(path)] = get_commit_numbers(
                 path, opts.day_num, opts.author)
 
-    commits_from_textfile = fill_commits_by_zero(
-        get_commits_from_textfile(base_path, use_files=opts.filenames,
-            file_type=opts.file_type))
+    try:
+        commits_from_textfile = fill_commits_by_zero(
+            get_commits_from_textfile(base_path, use_files=opts.filenames,
+                file_type=opts.file_type))
+    except ValueError:
+        print('ValueError')
 
     commits = update_as_commits(commits, commits_from_textfile)
     # pprint.pprint(commits)
