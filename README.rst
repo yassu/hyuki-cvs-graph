@@ -52,7 +52,7 @@ As json syntax:
     e.t.c.
   }
 
-where, date is a string which has form like "2000/01/01".
+where, date is a string which has form like "2000/01/01" or "2000-01-01".
 
 As yaml syntax, like json syntax:
 
