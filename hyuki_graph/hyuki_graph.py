@@ -10,7 +10,7 @@ import subprocess
 import re
 from optparse import OptionParser
 import json
-import yaml
+# import yaml
 from collections import defaultdict
 
 __VERSION__ = '0.2.0'
