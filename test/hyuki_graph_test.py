@@ -44,7 +44,9 @@ def get_dead_or_alive_number_test1():
 def get_dead_or_alive_number_test2():
     assert(get_dead_or_alive_number(10) == ALIVE)
 
+
 class StatusCellTestCase(TestCase):
+
     def color_test(self):
         c = StatusCell('D')
         c.set_color(91)
@@ -59,6 +61,7 @@ class StatusCellTestCase(TestCase):
 def is_correct_as_date_test0():
     assert(is_correct_as_date(set()) is False)
 
+
 def is_correct_as_date_test1():
     assert(is_correct_as_date("2015/03/21") is True)
 
@@ -70,6 +73,7 @@ def is_correct_as_date_test2():
 def is_correct_as_date_test3():
     assert(is_correct_as_date("2015/03-21") is False)
 
+
 def is_correct_as_date_test4():
     assert(is_correct_as_date("2015/03/99") is False)
 
@@ -77,12 +81,14 @@ def is_correct_as_date_test4():
 def is_correct_as_inputfile_data_test1():
     assert(is_correct_as_inputfile_data(1) is False)
 
+
 def is_correct_as_inputfile_data_test2():
     assert(is_correct_as_inputfile_data({"proj": 2}) is False)
 
 
 def is_correct_as_inputfile_data_test3():
     assert(is_correct_as_inputfile_data({"proj": "2015/03/20"}) is False)
+
 
 def is_correct_as_inputfile_data_test4():
     assert(is_correct_as_inputfile_data({"proj": {"2015/03/20": 2}}) is True)
@@ -127,14 +133,18 @@ def get_date_from_text_test7():
 def get_date_from_text_test8():
     get_date_from_text('2015/03-21')
 
+
 def get_ext_test1():
     assert(get_ext('json.json') == 'json')
+
 
 def get_ext_test2():
     assert(get_ext('test.yaml') == 'yaml')
 
+
 def get_ext_test3():
     assert(get_ext('test.yaml', 'json') == 'json')
+
 
 def get_ext_test4():
     assert(get_ext('~/dev/') is None)
@@ -175,6 +185,7 @@ def get_commits_from_text_test3():
             'proj2': {
             date(2016, 1, 2): 4,
             date(2016, 1, 4): 6}})
+
 
 @raises(TypeError)
 def get_commits_from_text_test4():

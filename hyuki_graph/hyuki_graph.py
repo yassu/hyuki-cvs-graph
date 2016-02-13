@@ -49,6 +49,7 @@ def get_dead_medium_or_large(n, medium_sep=DEFAULT_MEDIUM_SEP):
     else:
         return LARGE
 
+
 class StatusCell(str):
 
     def set_color(self, color):
@@ -81,6 +82,7 @@ def get_dead_or_alive_number(n, medium_sep=DEFAULT_MEDIUM_SEP):
     else:
         return ALIVE
 
+
 def is_correct_as_date(_date):
     _date = get_str(_date)
     if isinstance(_date, str) is False:
@@ -100,15 +102,16 @@ def is_correct_as_date(_date):
     if not year.isdigit() or not month.isdigit() or not day.isdigit():
         return False
 
-    year  = int(year)
+    year = int(year)
     month = int(month)
-    day   = int(day)
+    day = int(day)
 
     try:
         datetime.date(year, month, day)
     except ValueError:
         return False
     return True
+
 
 def get_str(s):
     # if s is object of unicode, return str(s)
@@ -117,6 +120,7 @@ def get_str(s):
         return str(s)
     else:
         return s
+
 
 def is_correct_as_inputfile_data(data):
     if isinstance(data, dict) is False:
@@ -157,6 +161,7 @@ def get_date_from_text(text):
     except ValueError:
         raise TypeError('{} is not in range for date.'.format(text))
 
+
 def get_ext(path, default_ext=None):
     if default_ext is not None:
         return default_ext
@@ -169,7 +174,7 @@ def get_ext(path, default_ext=None):
 
 
 def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME,
-            file_type=None):
+                              file_type=None):
     use_filenames = use_files.split()
     for i in range(len(use_filenames)):
         use_filenames[i] = os.path.join(base_path, use_filenames[i])
@@ -194,11 +199,12 @@ def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME,
                     sys.stderr.write("WARNING: {}\n".format(ex.message))
                 except ValueError:
                     sys.stderr.write("WARNING: {} has illegal format as {}.\n".
-                        format(fname, ext))
+                                     format(fname, ext))
             else:
                 sys.stderr.write('{} is a illegal file as input file.\n'.
-                    format(fname))
+                                 format(fname))
     return commits
+
 
 def get_commits_from_text(text, ext):
     if ext == 'json':
@@ -226,8 +232,8 @@ def get_commits_from_text(text, ext):
 
 
 def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
-            monochrome=False,
-            only_running=False):
+                    monochrome=False,
+                    only_running=False):
     dates = list(get_dates(day_num))
     projects = set()
 
@@ -279,7 +285,7 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
                 s = logs[(proj, date)]
             else:
                 s = logs[(proj, date)].colored_text
-            proj_log +=  s + ' '
+            proj_log += s + ' '
 
         splitted_logs.append(proj_log)
 
@@ -457,7 +463,7 @@ def main():
     try:
         commits_from_textfile = fill_commits_by_zero(
             get_commits_from_textfile(base_path, use_files=opts.filenames,
-                file_type=opts.file_type))
+                                      file_type=opts.file_type))
     except ValueError as ex:
         sys.stderr.write(ex.message)
 
