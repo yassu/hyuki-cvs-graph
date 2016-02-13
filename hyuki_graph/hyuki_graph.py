@@ -21,11 +21,6 @@ DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
 DEFAULT_USE_FILENAME = ' hyuki_graph.json hyuki_graph.yaml'
 
-DEAD = '\033[91m' + "D" + '\033[0m'     # dead commit
-MEDIUM = '\033[93m' + "M" + '\033[0m'   # medium commit
-LARGE = '\033[92m' + "L" + '\033[0m'    # Large commit
-ALIVE = '\033[92m' + "A" + '\033[0m'    # Alive commit
-
 
 def get_execuable_cvss():
     execuable_cvss = []
@@ -53,6 +48,31 @@ def get_dead_medium_or_large(n, medium_sep=DEFAULT_MEDIUM_SEP):
         return MEDIUM
     else:
         return LARGE
+
+class StatusCell(str):
+
+    def set_color(self, color):
+        self._color = color
+
+    @property
+    def color(self):
+        return str(self._color)
+
+    @property
+    def colored_text(self):
+        return '\033[{}m{}\033[0m'.format(self.color, str(self))
+
+DEAD = StatusCell('D')
+DEAD.set_color('91')
+
+MEDIUM = StatusCell('M')
+MEDIUM.set_color(93)
+
+LARGE = StatusCell('L')
+LARGE.set_color(92)
+
+ALIVE = StatusCell('A')
+ALIVE.set_color(92)
 
 
 def get_dead_or_alive_number(n, medium_sep=DEFAULT_MEDIUM_SEP):
@@ -206,6 +226,7 @@ def get_commits_from_text(text, ext):
 
 
 def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
+            monochrome=False,
             only_running=False):
     dates = list(get_dates(day_num))
     projects = set()
@@ -253,7 +274,12 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
         for date in dates:
             if more_than_nine:
                 proj_log += ' '
-            proj_log += logs[(proj, date)] + ' '
+
+            if monochrome:
+                s = logs[(proj, date)]
+            else:
+                s = logs[(proj, date)].colored_text
+            proj_log +=  s + ' '
 
         splitted_logs.append(proj_log)
 
@@ -377,6 +403,13 @@ def get_parser():
         help=('show only D and A')
     )
     parser.add_option(
+        '--monochrome', '-M',
+        action='store_true',
+        dest='monochrome',
+        default=False,
+        help="don't show color"
+    )
+    parser.add_option(
         '--file', '-f',
         action='store',
         default=DEFAULT_USE_FILENAME,
@@ -433,6 +466,7 @@ def main():
 
     commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
                                   opts.is_dead_or_alive,
+                                  monochrome=False,
                                   only_running=opts.only_running)
     print(commits_log)
 

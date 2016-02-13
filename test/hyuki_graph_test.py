@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # coding: UTF-8
 
+from unittest import TestCase
 from nose.tools import raises
 from hyuki_graph.hyuki_graph import(
     DEFAULT_MEDIUM_SEP,
     DEAD, ALIVE, MEDIUM, LARGE,
+    StatusCell,
     get_dead_or_alive_number, get_dead_medium_or_large,
     is_correct_as_date, is_correct_as_inputfile_data,
     get_dates, get_str_projname, get_commits_from_text,
@@ -41,6 +43,17 @@ def get_dead_or_alive_number_test1():
 
 def get_dead_or_alive_number_test2():
     assert(get_dead_or_alive_number(10) == ALIVE)
+
+class StatusCellTestCase(TestCase):
+    def color_test(self):
+        c = StatusCell('D')
+        c.set_color(91)
+        assert(c.color == '91')
+
+    def color_text_test(self):
+        c = StatusCell('D')
+        c.set_color(91)
+        assert(c.colored_text == '\033[91m' + "D" + '\033[0m')
 
 
 def is_correct_as_date_test0():

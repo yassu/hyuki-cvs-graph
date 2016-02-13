@@ -18,8 +18,9 @@ which considered by Mr. Hyuki.
 
 This tool makes table which is written project-name, day number from today and commit-status.
 
-Also, if there is ``hyuki_graph.json`` or ``hyuki_graph.yaml`` file in directory, which this program watch, this program make
-a table by using commits number which got by CVS and content of the file.
+Also, if there is ``hyuki_graph.json`` or ``hyuki_graph.yaml`` file in directory,
+which this program watch, this program make a table
+by using commits number which got by CVS and content of the file.
 
 Furtheremore, if cross point which project-name and day number is written D by red color,
 this means that the project does not committed.
@@ -76,12 +77,15 @@ If you want to use yaml syntax, import PyYaml package in manually:
 Options
 =========
 
--  ``-n``, ``--day-num``: indicate number of day, whcih is watched by this program.
--  ``-a``, ``--author``: indicate name of committer.
--  ``-m``, ``--medium-sep``: If more than or equal to number of commit is committed, printted L.
+- ``-n``, ``--day-num``: indicate number of day, whcih is watched by this program.
+- ``-a``, ``--author``: indicate name of committer.
+- ``-m``, ``--medium-sep``: If more than or equal to number of commit is committed, printted L.
    Default value is 10.
--  ``--DA``, ``--dead_or_alive``: Showing D and A instead of showing D, M and L.  If there is no commit, D is printted. And there is it, A is printted.
-- ``-f``, ``--file``: indicate input files by separating by space.  Default of this value is "hyuki_graph.json hyuki_graph.yaml.
+- ``--DA``, ``--dead_or_alive``: Showing D and A instead of showing D, M and L.
+   If there is no commit, D is printted. And there is it, A is printted.
+- ``-M``, ``--monochrome``: don't show color
+- ``-f``, ``--file``: indicate input files by separating by space.
+  Default of this value is "hyuki_graph.json hyuki_graph.yaml".
 - ``--FO, --file-only``: watch only input file not watching CVS
 - ``--t``, ``--file-type``: indicate format of input files. Please indicate json or yaml.
 - ``-r``, ``--only-running``: show only activate project
