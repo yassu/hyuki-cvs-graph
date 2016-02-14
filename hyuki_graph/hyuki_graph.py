@@ -264,7 +264,6 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
     for path, _commits in commits.items():
         project = get_str_projname(path)
         for date, commit_num in _commits.items():
-            # print('show_commits_number: {}'.format(show_commits_number))
             if not show_commits_number:
                 logs[(project, date)] = status_func(commit_num, medium_sep)
             else:
@@ -274,11 +273,13 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
                 logs[(project, date)] = num
             projects.add(project)
 
-        if only_running and \
-                set([logs[(project, date)] for date in dates]) == set([DEAD]):
+        if only_running and (
+                (set([logs[(project, date)] for date in dates]) == set([DEAD]))
+                or set([logs[(project, date)] for date in dates]) == set(['0'])
+                    ):
             projects.remove(project)
             for date in dates:
-                del(logs[project, date])
+                del(logs[(project, date)])
 
     if projects == set():
         sys.stderr.write("WARNING: There doesn't exist repository which "
