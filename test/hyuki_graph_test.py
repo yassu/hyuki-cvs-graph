@@ -11,6 +11,7 @@ from hyuki_graph.hyuki_graph import(
     is_correct_as_date, is_correct_as_inputfile_data,
     get_dates, get_str_projname, get_commits_from_text,
     get_ext,
+    get_digits,
     get_date_from_text, fill_commits_by_zero, update_as_commits
 )
 from datetime import date, timedelta
@@ -195,7 +196,6 @@ def get_commits_from_text_test4():
             '"2016/01/04": 6}}'
             )
     get_commits_from_text(text, 'sjon')
-
 
 def get_dates_test1():
     assert(

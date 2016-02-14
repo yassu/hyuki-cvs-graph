@@ -106,7 +106,8 @@ Option
 -  ``--DA``, ``--dead_or_alive``: D, M, Lを表示する代わりに D,
    Aだけを表示します. コミットがなければD,
    コミットがあればAを表示します.
-- ``--M``, ``--monochrome``: 色を表示しません.
+- ``-M``, ``--monochrome``: 色を表示しません.
+- ``--show-commit-numbers``, ``-c``: コミット数を表示します
 - ``-f``, ``--file``: 入力ファイルをスペース区切りで指定します.
   デフォルトは "hyuki_graph.json hyuki_graph.yaml" です.
 - ``-t``, ``--file-type``: 入力ファイルのタイプを指定します.

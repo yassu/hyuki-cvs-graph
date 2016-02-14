@@ -84,6 +84,7 @@ Options
 - ``--DA``, ``--dead_or_alive``: Showing D and A instead of showing D, M and L.
    If there is no commit, D is printted. And there is it, A is printted.
 - ``-M``, ``--monochrome``: don't show color
+- ``--show-commit-numbers``, ``-c``: show commit numbers
 - ``-f``, ``--file``: indicate input files by separating by space.
   Default of this value is "hyuki_graph.json hyuki_graph.yaml".
 - ``--FO, --file-only``: watch only input file not watching CVS

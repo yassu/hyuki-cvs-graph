@@ -230,9 +230,27 @@ def get_commits_from_text(text, ext):
             true_data[proj][date_d] = date_status[date]
     return dict(true_data)
 
+def get_digits(days, commits, show_commits_number):
+        # if days >= 10: return 2
+        # elif show_commits_number and max(proj[commits]) >= 10 return 2
+        # else return 1
+    if len(days) >= 10:
+        return 2
+    if not show_commits_number:
+        # print('show commits number')
+        return 1
+    for proj, date_to_commitnum in commits.items():
+        for _, commitnum in date_to_commitnum.items():
+            if commitnum >= 10:
+                return 2
+
+    # print('last')
+    return 1
+
 
 def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
                     monochrome=False,
+                    show_commits_number=False,
                     only_running=False):
     dates = list(get_dates(day_num))
     projects = set()
@@ -243,10 +261,17 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
         status_func = get_dead_medium_or_large
 
     logs = dict()  # dictionary from tuple of projname and date to status
-    for path, commits in commits.items():
+    for path, _commits in commits.items():
         project = get_str_projname(path)
-        for date, commit_num in commits.items():
-            logs[(project, date)] = status_func(commit_num, medium_sep)
+        for date, commit_num in _commits.items():
+            # print('show_commits_number: {}'.format(show_commits_number))
+            if not show_commits_number:
+                logs[(project, date)] = status_func(commit_num, medium_sep)
+            else:
+                num = StatusCell(str(commit_num))
+                color = status_func(commit_num, medium_sep).color
+                num.set_color(color)
+                logs[(project, date)] = num
             projects.add(project)
 
         if only_running and \
@@ -263,11 +288,9 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
     splitted_logs = []
     proj_len = max(len(project) for project in projects) + 1
 
-    more_than_nine = (day_num >= 10)
-
     date_log = ' ' * proj_len
     date_cnt = 0
-    space_digit = 2 if more_than_nine else 1
+    space_digit = get_digits(dates, commits, show_commits_number)
     for date in dates:
         # date_log += str(date_cnt) + ' '
         date_log += ('%' + str(space_digit) + 'd') % date_cnt + ' '
@@ -278,14 +301,12 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
     for proj in sorted(projects, key=lambda s: s.lower()):
         proj_log = proj + ' ' * (proj_len - len(proj))
         for date in dates:
-            if more_than_nine:
-                proj_log += ' '
 
             if monochrome:
                 s = logs[(proj, date)]
             else:
                 s = logs[(proj, date)].colored_text
-            proj_log += s + ' '
+            proj_log += ' ' * (space_digit - len(logs[(proj, date)])) + s + ' '
 
         splitted_logs.append(proj_log)
 
@@ -409,6 +430,13 @@ def get_parser():
         help=('show only D and A')
     )
     parser.add_option(
+        '-c', '--show-commit-numbers',
+        action='store_true',
+        default=False,
+        dest='show_commit_numbers',
+        help='show commit numbers for all projects'
+    )
+    parser.add_option(
         '--monochrome', '-M',
         action='store_true',
         dest='monochrome',
@@ -473,6 +501,7 @@ def main():
     commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
                                   opts.is_dead_or_alive,
                                   monochrome=opts.monochrome,
+                                  show_commits_number=opts.show_commit_numbers,
                                   only_running=opts.only_running)
     print(commits_log)
 
