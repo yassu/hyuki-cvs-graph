@@ -472,7 +472,7 @@ def main():
 
     commits_log = get_commits_log(commits, opts.day_num, opts.medium_sep,
                                   opts.is_dead_or_alive,
-                                  monochrome=False,
+                                  monochrome=opts.monochrome,
                                   only_running=opts.only_running)
     print(commits_log)
 
