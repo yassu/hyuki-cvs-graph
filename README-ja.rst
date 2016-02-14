@@ -85,11 +85,11 @@ CVSを用いて自動的に行うためのプログラムです.
 
 という形式のファイルを受け取ることができます.
 
-yaml形式を使う場合には, 明示的にPyYamlパッケージをインストールしてください:
+yaml形式を使う場合には, 明示的にPyYAMLパッケージをインストールしてください:
 
 .. code:
 
-  pip install PyYaml
+  pip install PyYAML
 
 Option
 ======

@@ -68,11 +68,11 @@ As yaml syntax, like json syntax:
     date: commit number
     e.t.c.
 
-If you want to use yaml syntax, import PyYaml package in manually:
+If you want to use yaml syntax, import PyYAML package in manually:
 
 .. code::
 
-    pip install PyYaml
+    pip install PyYAML
 
 Options
 =========
