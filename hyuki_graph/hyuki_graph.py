@@ -323,7 +323,7 @@ def get_revision_cvs(path):
         return None
 
 
-def get_commit_numbers(path, day_num, author):
+def get_commit_numbers(path, day_num, author, is_log=False):
     first_chdir = os.getcwd()
     os.chdir(path)
 
@@ -332,8 +332,9 @@ def get_commit_numbers(path, day_num, author):
         return {}
 
     if cvs == 'git':
+        log_cmd = 'log' if is_log else "reflog"
         log = subprocess.check_output(
-            ['git', 'reflog', '--oneline', '--date=short',
+            ['git', log_cmd , '--oneline', '--date=short',
                 '--pretty=format:%ad %an']).decode('utf-8')
     elif cvs == 'hg':
         log = subprocess.check_output(
@@ -438,6 +439,12 @@ def get_parser():
         help='show commit numbers for all projects'
     )
     parser.add_option(
+        '--log',
+        action='store_true',
+        dest='is_log',
+        help='use log (not reflog) command'
+    )
+    parser.add_option(
         '--monochrome', '-M',
         action='store_true',
         dest='monochrome',
@@ -487,7 +494,7 @@ def main():
         projects = list(get_cvs_dirs(base_path))
         for path in projects:
             commits[get_str_projname(path)] = get_commit_numbers(
-                path, opts.day_num, opts.author)
+                path, opts.day_num, opts.author, is_log=opts.is_log)
 
     try:
         commits_from_textfile = fill_commits_by_zero(
