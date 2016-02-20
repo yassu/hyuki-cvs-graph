@@ -483,6 +483,11 @@ def get_parser():
 
 def main():
     opts, args = get_parser().parse_args()
+
+    if len(args) > 1:
+        sys.stderr.write("Number of arguments should be zero or one.\n")
+        sys.exit()
+
     if not opts.day_num:
         opts.day_num = DEFAULT_NUMBER_OF_DAY
     base_path = os.path.abspath('.' if len(args) == 0 else args[0])
