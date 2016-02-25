@@ -251,7 +251,8 @@ def get_digits(days, commits, show_commits_number):
 def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
                     monochrome=False,
                     show_commits_number=False,
-                    only_running=False):
+                    only_running=False,
+                    is_hide_status=False):
     dates = list(get_dates(day_num))
     projects = set()
 
@@ -289,25 +290,27 @@ def get_commits_log(commits, day_num, medium_sep, dead_or_alive,
     splitted_logs = []
     proj_len = max(len(project) for project in projects) + 1
 
-    date_log = ' ' * proj_len
-    date_cnt = 0
-    space_digit = get_digits(dates, commits, show_commits_number)
-    for date in dates:
-        # date_log += str(date_cnt) + ' '
-        date_log += ('%' + str(space_digit) + 'd') % date_cnt + ' '
-        date_cnt += 1
-    splitted_logs.append(date_log)
+    if not is_hide_status:
+        date_log = ' ' * proj_len
+        date_cnt = 0
+        space_digit = get_digits(dates, commits, show_commits_number)
+        for date in dates:
+            # date_log += str(date_cnt) + ' '
+            date_log += ('%' + str(space_digit) + 'd') % date_cnt + ' '
+            date_cnt += 1
+        splitted_logs.append(date_log)
 
     proj_log = ''
     for proj in sorted(projects, key=lambda s: s.lower()):
         proj_log = proj + ' ' * (proj_len - len(proj))
-        for date in dates:
+        if not is_hide_status:
+            for date in dates:
 
-            if monochrome:
-                s = logs[(proj, date)]
-            else:
-                s = logs[(proj, date)].colored_text
-            proj_log += ' ' * (space_digit - len(logs[(proj, date)])) + s + ' '
+                if monochrome:
+                    s = logs[(proj, date)]
+                else:
+                    s = logs[(proj, date)].colored_text
+                proj_log += ' ' * (space_digit - len(logs[(proj, date)])) + s + ' '
 
         splitted_logs.append(proj_log)
 
@@ -478,6 +481,13 @@ def get_parser():
         help="show only running projects",
         dest='only_running',
     )
+    parser.add_option(
+        '--hide_status',
+        action='store_true',
+        default=False,
+        help='show only project name, without status',
+        dest='is_hide_status'
+    )
     return parser
 
 
@@ -515,7 +525,8 @@ def main():
                                   opts.is_dead_or_alive,
                                   monochrome=opts.monochrome,
                                   show_commits_number=opts.show_commit_numbers,
-                                  only_running=opts.only_running)
+                                  only_running=opts.only_running,
+                                  is_hide_status=opts.is_hide_status)
     print(commits_log)
 
 
