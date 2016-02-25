@@ -192,13 +192,8 @@ def get_commits_from_textfile(base_path, use_files=DEFAULT_USE_FILENAME,
             continue
 
         with open(fname) as f:
-            ext = get_ext(fname)
-            use_exts = ('json', 'yaml')
-            if file_type:
-                ext = file_type
-                use_exts = (file_type, )
-
-            if set(use_exts).issubset({'json', 'yaml'}):
+            ext = file_type if file_type else get_ext(fname)
+            if ext in {'json', 'yaml'}:
                 try:
                     commits.update(get_commits_from_text(f.read(), ext))
                 except TypeError as ex:
