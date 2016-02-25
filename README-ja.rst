@@ -110,7 +110,7 @@ Option
 - ``--show-commit-numbers``, ``-c``: コミット数を表示します
 - ``--log``: gitコマンドにおいて, reflogではなくlogコマンドを使う
 - ``-f``, ``--file``: 入力ファイルをスペース区切りで指定します.
-  デフォルトは "hyuki_graph.json hyuki_graph.yaml" です.
+  デフォルトは "~/hyuki_graph.json ~/hyuki_graph.yaml hyuki_graph.json hyuki_graph.yaml" です.
 - ``-t``, ``--file-type``: 入力ファイルのタイプを指定します.
   この値にはjsonかyamlのいずれかを指定してください.
 - ``--FO, --file-only``: CVSを見ずに, 入力ファイルだけを見ます.

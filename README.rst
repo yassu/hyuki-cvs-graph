@@ -87,7 +87,7 @@ Options
 - ``--show-commit-numbers``, ``-c``: show commit numbers
 - ``--log``: use log command not reflog command if you use git command
 - ``-f``, ``--file``: indicate input files by separating by space.
-  Default of this value is "hyuki_graph.json hyuki_graph.yaml".
+  Default of this value is "~/hyuki_graph.json ~/hyuki_graph.yaml hyuki_graph.json hyuki_graph.yaml".
 - ``--FO, --file-only``: watch only input file not watching CVS
 - ``--t``, ``--file-type``: indicate format of input files. Please indicate json or yaml.
 - ``-r``, ``--only-running``: show only activate project

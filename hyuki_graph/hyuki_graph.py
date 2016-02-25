@@ -19,7 +19,13 @@ PYTHON_VERSION = sys.version_info[0]    # major version
 
 DEFAULT_NUMBER_OF_DAY = 7
 DEFAULT_MEDIUM_SEP = 10
-DEFAULT_USE_FILENAME = ' hyuki_graph.json hyuki_graph.yaml'
+HOME_DIR = os.path.expanduser('~') + os.path.sep
+DEFAULT_USE_FILENAME = " ".join([
+                        os.path.join(HOME_DIR, 'hyuki_graph.json'),
+                        os.path.join(HOME_DIR, 'hyuki_graph.yaml'),
+                        'hyuki_graph.json',
+                        'hyuki_graph.yaml'
+                        ])
 
 
 def get_execuable_cvss():
