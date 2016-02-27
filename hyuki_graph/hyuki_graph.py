@@ -13,7 +13,7 @@ import json
 import yaml
 from collections import defaultdict
 
-__VERSION__ = '0.2.7'
+__VERSION__ = '0.2.8'
 
 PYTHON_VERSION = sys.version_info[0]    # major version
 
