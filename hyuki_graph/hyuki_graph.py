@@ -483,7 +483,7 @@ def get_parser():
         dest='only_running',
     )
     parser.add_option(
-        '--hide_status',
+        '--hide-status',
         action='store_true',
         default=False,
         help='show only project name, without status',
